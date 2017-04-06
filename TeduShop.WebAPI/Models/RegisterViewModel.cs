@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TeduShop.Web.Models
 {
@@ -26,6 +22,5 @@ namespace TeduShop.Web.Models
 
         [Required(ErrorMessage = "Bạn cần nhập số điện thoại.")]
         public string PhoneNumber { set; get; }
-
     }
 }

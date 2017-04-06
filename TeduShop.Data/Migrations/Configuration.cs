@@ -60,11 +60,11 @@
 
         private void CreateUser(TeduShopDbContext context)
         {
-            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new TeduShopDbContext()));
+            var manager = new UserManager<AppUser>(new UserStore<AppUser>(new TeduShopDbContext()));
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new TeduShopDbContext()));
 
-            var user = new ApplicationUser()
+            var user = new AppUser()
             {
                 UserName = "admin",
                 Email = "admin@tedu.com.vn",

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TeduShop.Web.Models
 {
@@ -10,7 +6,7 @@ namespace TeduShop.Web.Models
     {
         public int ID { set; get; }
 
-        [Required(ErrorMessage ="Tên không được trống")]
+        [Required(ErrorMessage = "Tên không được trống")]
         public string Name { set; get; }
 
         [MaxLength(50, ErrorMessage = "Số điện thoại không vượt quá 50 ký tự")]

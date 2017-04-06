@@ -8,7 +8,6 @@ namespace TeduShop.Web.Mappings
     {
         public static void Configure()
         {
-            
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Post, PostViewModel>();
@@ -21,11 +20,9 @@ namespace TeduShop.Web.Mappings
                 cfg.CreateMap<Slide, SlideViewModel>();
                 cfg.CreateMap<Page, PageViewModel>();
                 cfg.CreateMap<ContactDetail, ContactDetailViewModel>();
-                cfg.CreateMap<ApplicationGroup, ApplicationGroupViewModel>();
-                cfg.CreateMap<ApplicationRole, ApplicationRoleViewModel>();
-                cfg.CreateMap<ApplicationUser, ApplicationUserViewModel>();
+                cfg.CreateMap<AppRole, ApplicationRoleViewModel>();
+                cfg.CreateMap<AppUser, AppUserViewModel>();
             });
         }
-
     }
 }

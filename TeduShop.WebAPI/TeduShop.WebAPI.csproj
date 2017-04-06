@@ -258,9 +258,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\ApplicationGroupController.cs" />
-    <Compile Include="Controllers\ApplicationRoleController.cs" />
-    <Compile Include="Controllers\ApplicationUserController.cs" />
+    <Compile Include="Controllers\AppRoleController.cs" />
+    <Compile Include="Controllers\AppUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostCategoryController.cs" />
     <Compile Include="Controllers\ProductCategoryController.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TeduShop.Data.Infrastructure;
 using TeduShop.Data.Repositories;
 using TeduShop.Model.Models;
@@ -57,7 +56,6 @@ namespace TeduShop.Service
                 return _ProductCategoryRepository.GetMulti(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
             else
                 return _ProductCategoryRepository.GetAll();
-
         }
 
         public IEnumerable<ProductCategory> GetAllByParentId(int parentId)

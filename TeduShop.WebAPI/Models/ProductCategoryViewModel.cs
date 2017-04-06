@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace TeduShop.Web.Models
 {
@@ -29,14 +27,11 @@ namespace TeduShop.Web.Models
 
         public DateTime? CreatedDate { set; get; }
 
-
         public string CreatedBy { set; get; }
 
         public DateTime? UpdatedDate { set; get; }
 
-
         public string UpdatedBy { set; get; }
-
 
         public string MetaKeyword { set; get; }
 

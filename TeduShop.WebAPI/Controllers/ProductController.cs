@@ -16,7 +16,6 @@ using TeduShop.Service;
 using TeduShop.Web.Infrastructure.Core;
 using TeduShop.Web.Infrastructure.Extensions;
 using TeduShop.Web.Models;
-using TeduShop.Common;
 
 namespace TeduShop.Web.Controllers
 {
@@ -25,6 +24,7 @@ namespace TeduShop.Web.Controllers
     public class ProductController : ApiControllerBase
     {
         #region Initialize
+
         private IProductService _productService;
 
         public ProductController(IErrorService errorService, IProductService productService)
@@ -33,7 +33,7 @@ namespace TeduShop.Web.Controllers
             this._productService = productService;
         }
 
-        #endregion
+        #endregion Initialize
 
         [Route("getallparents")]
         [HttpGet]
@@ -50,6 +50,7 @@ namespace TeduShop.Web.Controllers
             };
             return CreateHttpResponse(request, func);
         }
+
         [Route("getbyid/{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetById(HttpRequestMessage request, int id)
@@ -91,7 +92,6 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
-
 
         [Route("create")]
         [HttpPost]
@@ -173,6 +173,7 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
+
         [Route("deletemulti")]
         [HttpDelete]
         public HttpResponseMessage DeleteMulti(HttpRequestMessage request, string checkedProducts)
@@ -319,6 +320,7 @@ namespace TeduShop.Web.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
+
         private List<Product> ReadProductFromExcel(string fullPath, int categoryId)
         {
             using (var package = new ExcelPackage(new FileInfo(fullPath)))
@@ -331,7 +333,6 @@ namespace TeduShop.Web.Controllers
                 decimal originalPrice = 0;
                 decimal price = 0;
                 decimal promotionPrice;
-
 
                 bool status = false;
                 bool showHome = false;
@@ -350,7 +351,6 @@ namespace TeduShop.Web.Controllers
                     if (int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out warranty))
                     {
                         productViewModel.Warranty = warranty;
-
                     }
 
                     decimal.TryParse(workSheet.Cells[i, 4].Value.ToString().Replace(",", ""), out originalPrice);
@@ -362,7 +362,6 @@ namespace TeduShop.Web.Controllers
                     if (decimal.TryParse(workSheet.Cells[i, 6].Value.ToString(), out promotionPrice))
                     {
                         productViewModel.PromotionPrice = promotionPrice;
-
                     }
 
                     productViewModel.Content = workSheet.Cells[i, 7].Value.ToString();

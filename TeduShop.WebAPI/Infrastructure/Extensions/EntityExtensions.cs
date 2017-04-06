@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using TeduShop.Model.Models;
 using TeduShop.Web.Models;
 
@@ -27,8 +24,8 @@ namespace TeduShop.Web.Infrastructure.Extensions
             postCategory.MetaKeyword = postCategoryVm.MetaKeyword;
             postCategory.MetaDescription = postCategoryVm.MetaDescription;
             postCategory.Status = postCategoryVm.Status;
-
         }
+
         public static void UpdateProductCategory(this ProductCategory productCategory, ProductCategoryViewModel productCategoryVm)
         {
             productCategory.ID = productCategoryVm.ID;
@@ -47,8 +44,8 @@ namespace TeduShop.Web.Infrastructure.Extensions
             productCategory.MetaKeyword = productCategoryVm.MetaKeyword;
             productCategory.MetaDescription = productCategoryVm.MetaDescription;
             productCategory.Status = productCategoryVm.Status;
-
         }
+
         public static void UpdatePost(this Post post, PostViewModel postVm)
         {
             post.ID = postVm.ID;
@@ -122,13 +119,7 @@ namespace TeduShop.Web.Infrastructure.Extensions
             order.CustomerId = orderVm.CustomerId;
         }
 
-        public static void UpdateApplicationGroup(this ApplicationGroup appGroup, ApplicationGroupViewModel appGroupViewModel)
-        {
-            appGroup.ID = appGroupViewModel.ID;
-            appGroup.Name = appGroupViewModel.Name;
-        }
-
-        public static void UpdateApplicationRole(this ApplicationRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")
+        public static void UpdateApplicationRole(this AppRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")
         {
             if (action == "update")
                 appRole.Id = appRoleViewModel.Id;
@@ -137,9 +128,9 @@ namespace TeduShop.Web.Infrastructure.Extensions
             appRole.Name = appRoleViewModel.Name;
             appRole.Description = appRoleViewModel.Description;
         }
-        public static void UpdateUser(this ApplicationUser appUser, ApplicationUserViewModel appUserViewModel, string action = "add")
-        {
 
+        public static void UpdateUser(this AppUser appUser, AppUserViewModel appUserViewModel, string action = "add")
+        {
             appUser.Id = appUserViewModel.Id;
             appUser.FullName = appUserViewModel.FullName;
             appUser.BirthDay = appUserViewModel.BirthDay;

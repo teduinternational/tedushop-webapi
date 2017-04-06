@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeduShop.Model.Models
 {
-    public class ApplicationRole : IdentityRole
+    [Table("AppRoles")]
+    public class AppRole : IdentityRole
     {
-        public ApplicationRole() : base()
+        public AppRole() : base()
         {
-
         }
+
         [StringLength(250)]
         public string Description { set; get; }
     }

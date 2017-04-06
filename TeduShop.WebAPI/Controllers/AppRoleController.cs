@@ -1,30 +1,30 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using TeduShop.Common.Exceptions;
 using TeduShop.Model.Models;
 using TeduShop.Service;
+using TeduShop.Web.App_Start;
 using TeduShop.Web.Infrastructure.Core;
 using TeduShop.Web.Infrastructure.Extensions;
 using TeduShop.Web.Models;
 
 namespace TeduShop.Web.Controllers
 {
-    [RoutePrefix("api/applicationRole")]
+    [RoutePrefix("api/appRole")]
     [Authorize]
-    public class ApplicationRoleController : ApiControllerBase
+    public class AppRoleController : ApiControllerBase
     {
-        private IApplicationRoleService _appRoleService;
+        private ApplicationRoleManager _roleManager;
 
-        public ApplicationRoleController(IErrorService errorService,
-            IApplicationRoleService appRoleService) : base(errorService)
+        public AppRoleController(IErrorService errorService, ApplicationRoleManager roleManager) : base(errorService)
         {
-            _appRoleService = appRoleService;
+            _roleManager = roleManager;
         }
 
         [Route("getlistpaging")]
@@ -35,8 +35,14 @@ namespace TeduShop.Web.Controllers
             {
                 HttpResponseMessage response = null;
                 int totalRow = 0;
-                var model = _appRoleService.GetAll(page, pageSize, out totalRow, filter);
-                IEnumerable<ApplicationRoleViewModel> modelVm = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(model);
+                var query = _roleManager.Roles;
+                if (!string.IsNullOrEmpty(filter))
+                    query = query.Where(x => x.Description.Contains(filter));
+                totalRow = query.Count();
+
+                var model = query.OrderBy(x => x.Name).Skip((page - 1) * pageSize).Take(pageSize);
+
+                IEnumerable<ApplicationRoleViewModel> modelVm = Mapper.Map<IEnumerable<AppRole>, IEnumerable<ApplicationRoleViewModel>>(model);
 
                 PaginationSet<ApplicationRoleViewModel> pagedSet = new PaginationSet<ApplicationRoleViewModel>()
                 {
@@ -51,6 +57,7 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
+
         [Route("getlistall")]
         [HttpGet]
         public HttpResponseMessage GetAll(HttpRequestMessage request)
@@ -58,14 +65,15 @@ namespace TeduShop.Web.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response = null;
-                var model = _appRoleService.GetAll();
-                IEnumerable<ApplicationRoleViewModel> modelVm = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(model);
+                var model = _roleManager.Roles.ToList();
+                IEnumerable<ApplicationRoleViewModel> modelVm = Mapper.Map<IEnumerable<AppRole>, IEnumerable<ApplicationRoleViewModel>>(model);
 
                 response = request.CreateResponse(HttpStatusCode.OK, modelVm);
 
                 return response;
             });
         }
+
         [Route("detail/{id}")]
         [HttpGet]
         public HttpResponseMessage Details(HttpRequestMessage request, string id)
@@ -74,7 +82,7 @@ namespace TeduShop.Web.Controllers
             {
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
             }
-            ApplicationRole appRole = _appRoleService.GetDetail(id);
+            AppRole appRole = _roleManager.FindById(id);
             if (appRole == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "No group");
@@ -88,12 +96,11 @@ namespace TeduShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newAppRole = new ApplicationRole();
+                var newAppRole = new AppRole();
                 newAppRole.UpdateApplicationRole(applicationRoleViewModel);
                 try
                 {
-                    _appRoleService.Add(newAppRole);
-                    _appRoleService.Save();
+                    _roleManager.Create(newAppRole);
                     return request.CreateResponse(HttpStatusCode.OK, applicationRoleViewModel);
                 }
                 catch (NameDuplicatedException dex)
@@ -113,12 +120,11 @@ namespace TeduShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appRole = _appRoleService.GetDetail(applicationRoleViewModel.Id);
+                var appRole = _roleManager.FindById(applicationRoleViewModel.Id);
                 try
                 {
                     appRole.UpdateApplicationRole(applicationRoleViewModel, "update");
-                    _appRoleService.Update(appRole);
-                    _appRoleService.Save();
+                    _roleManager.Update(appRole);
                     return request.CreateResponse(HttpStatusCode.OK, appRole);
                 }
                 catch (NameDuplicatedException dex)
@@ -136,37 +142,10 @@ namespace TeduShop.Web.Controllers
         [Route("delete")]
         public HttpResponseMessage Delete(HttpRequestMessage request, string id)
         {
-            _appRoleService.Delete(id);
-            _appRoleService.Save();
+            var appRole = _roleManager.FindById(id);
+
+            _roleManager.Delete(appRole);
             return request.CreateResponse(HttpStatusCode.OK, id);
-        }
-
-        [Route("deletemulti")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteMulti(HttpRequestMessage request, string checkedList)
-        {
-            return CreateHttpResponse(request, () =>
-            {
-                HttpResponseMessage response = null;
-                if (!ModelState.IsValid)
-                {
-                    response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
-                }
-                else
-                {
-                    var listItem = new JavaScriptSerializer().Deserialize<List<string>>(checkedList);
-                    foreach (var item in listItem)
-                    {
-                        _appRoleService.Delete(item);
-                    }
-
-                    _appRoleService.Save();
-
-                    response = request.CreateResponse(HttpStatusCode.OK, listItem.Count);
-                }
-
-                return response;
-            });
         }
     }
 }

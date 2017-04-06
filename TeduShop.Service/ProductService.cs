@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TeduShop.Common;
 using TeduShop.Data.Infrastructure;
@@ -145,7 +144,6 @@ namespace TeduShop.Service
                     productTag.TagID = tagId;
                     _productTagRepository.Add(productTag);
                 }
-
             }
         }
 
@@ -157,7 +155,6 @@ namespace TeduShop.Service
         public IEnumerable<Product> GetHotProduct(int top)
         {
             return _productRepository.GetMulti(x => x.Status && x.HotFlag == true).OrderByDescending(x => x.CreatedDate).Take(top);
-
         }
 
         public IEnumerable<Product> GetListProductByCategoryIdPaging(int categoryId, int page, int pageSize, string sort, out int totalRow)
@@ -169,12 +166,15 @@ namespace TeduShop.Service
                 case "popular":
                     query = query.OrderByDescending(x => x.ViewCount);
                     break;
+
                 case "discount":
                     query = query.OrderByDescending(x => x.PromotionPrice.HasValue);
                     break;
+
                 case "price":
                     query = query.OrderBy(x => x.Price);
                     break;
+
                 default:
                     query = query.OrderByDescending(x => x.CreatedDate);
                     break;
@@ -199,12 +199,15 @@ namespace TeduShop.Service
                 case "popular":
                     query = query.OrderByDescending(x => x.ViewCount);
                     break;
+
                 case "discount":
                     query = query.OrderByDescending(x => x.PromotionPrice.HasValue);
                     break;
+
                 case "price":
                     query = query.OrderBy(x => x.Price);
                     break;
+
                 default:
                     query = query.OrderByDescending(x => x.CreatedDate);
                     break;

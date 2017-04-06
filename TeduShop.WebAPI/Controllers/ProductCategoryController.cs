@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 using TeduShop.Web.Infrastructure.Core;
-using TeduShop.Web.Models;
 using TeduShop.Web.Infrastructure.Extensions;
-using System.Web.Script.Serialization;
-using System.Data.Entity.Validation;
+using TeduShop.Web.Models;
 
 namespace TeduShop.Web.Controllers
 {
@@ -20,6 +20,7 @@ namespace TeduShop.Web.Controllers
     public class ProductCategoryController : ApiControllerBase
     {
         #region Initialize
+
         private IProductCategoryService _productCategoryService;
 
         public ProductCategoryController(IErrorService errorService, IProductCategoryService productCategoryService)
@@ -28,7 +29,7 @@ namespace TeduShop.Web.Controllers
             this._productCategoryService = productCategoryService;
         }
 
-        #endregion
+        #endregion Initialize
 
         [Route("getallparents")]
         [HttpGet]
@@ -44,6 +45,7 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
+
         [Route("getbyid/{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetById(HttpRequestMessage request, int id)
@@ -85,7 +87,6 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
-
 
         [Route("create")]
         [HttpPost]
@@ -153,7 +154,6 @@ namespace TeduShop.Web.Controllers
                         }
                         throw;
                     }
-                    
 
                     var responseData = Mapper.Map<ProductCategory, ProductCategoryViewModel>(dbProductCategory);
                     response = request.CreateResponse(HttpStatusCode.Created, responseData);
@@ -187,6 +187,7 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
+
         [Route("deletemulti")]
         [HttpDelete]
         [AllowAnonymous]

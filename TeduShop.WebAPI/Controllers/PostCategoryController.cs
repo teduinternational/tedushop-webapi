@@ -6,8 +6,8 @@ using System.Web.Http;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 using TeduShop.Web.Infrastructure.Core;
-using TeduShop.Web.Models;
 using TeduShop.Web.Infrastructure.Extensions;
+using TeduShop.Web.Models;
 
 namespace TeduShop.Web.Controllers
 {
@@ -15,7 +15,7 @@ namespace TeduShop.Web.Controllers
     [Authorize]
     public class PostCategoryController : ApiControllerBase
     {
-        IPostCategoryService _postCategoryService;
+        private IPostCategoryService _postCategoryService;
 
         public PostCategoryController(IErrorService errorService, IPostCategoryService postCategoryService) :
             base(errorService)
@@ -57,7 +57,6 @@ namespace TeduShop.Web.Controllers
                     _postCategoryService.Save();
 
                     response = request.CreateResponse(HttpStatusCode.Created, category);
-
                 }
                 return response;
             });
@@ -81,7 +80,6 @@ namespace TeduShop.Web.Controllers
                     _postCategoryService.Save();
 
                     response = request.CreateResponse(HttpStatusCode.OK);
-
                 }
                 return response;
             });
@@ -102,7 +100,6 @@ namespace TeduShop.Web.Controllers
                     _postCategoryService.Save();
 
                     response = request.CreateResponse(HttpStatusCode.OK);
-
                 }
                 return response;
             });
