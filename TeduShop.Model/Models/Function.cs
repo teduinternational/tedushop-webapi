@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeduShop.Model.Models
 {
-    [Table("Menus")]
-    public class Menu
+    [Table("Functions")]
+    public class Function
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,13 +18,13 @@ namespace TeduShop.Model.Models
         [MaxLength(256)]
         public string URL { set; get; }
 
-        public int? DisplayOrder { set; get; }
+        public int DisplayOrder { set; get; }
 
         [Required]
-        public int GroupID { set; get; }
+        public int ParentId { set; get; }
 
-        [ForeignKey("GroupID")]
-        public virtual MenuGroup MenuGroup { set; get; }
+        [ForeignKey("ParentId")]
+        public virtual Function Parent { set; get; }
 
         [MaxLength(10)]
         public string Target { set; get; }

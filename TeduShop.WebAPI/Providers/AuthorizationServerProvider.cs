@@ -12,6 +12,7 @@ namespace TeduShop.Web.Providers
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
+            await Task.FromResult<object>(null);
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
@@ -37,9 +38,11 @@ namespace TeduShop.Web.Providers
             }
             if (user != null)
             {
-                ClaimsIdentity identity = await userManager.CreateIdentityAsync(
-                               user,
-                               DefaultAuthenticationTypes.ExternalBearer);
+                ClaimsIdentity identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer);
+                identity.AddClaim(new Claim("fullName", user.FullName));
+                identity.AddClaim(new Claim("avatar", user.Avatar));
+                identity.AddClaim(new Claim("email", user.Email));
+
                 context.Validated(identity);
             }
             else

@@ -65,8 +65,7 @@
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\Footer.cs" />
-    <Compile Include="Models\Menu.cs" />
-    <Compile Include="Models\MenuGroup.cs" />
+    <Compile Include="Models\Function.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Page.cs" />

@@ -3,11 +3,13 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace TeduShop.Model.Models
 {
+    [Table("AppUsers")]
     public class AppUser : IdentityUser
     {
         [MaxLength(256)]
@@ -15,6 +17,8 @@ namespace TeduShop.Model.Models
 
         [MaxLength(256)]
         public string Address { set; get; }
+
+        public string Avatar { get; set; }
 
         public DateTime? BirthDay { set; get; }
 
