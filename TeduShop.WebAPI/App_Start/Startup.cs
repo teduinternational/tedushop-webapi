@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using TeduShop.Data;
 using TeduShop.Data.Infrastructure;
 using TeduShop.Data.Repositories;
+using TeduShop.Identity;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 

@@ -14,12 +14,5 @@ namespace TeduShop.Web.Controllers
         {
             this._errorService = errorService;
         }
-
-        [HttpGet]
-        [Route("TestMethod")]
-        public string TestMethod()
-        {
-            return "Hello, TEDU Member. ";
-        }
     }
 }

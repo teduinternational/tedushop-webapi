@@ -2,23 +2,16 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using System;
-using System.Security.Claims;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TeduShop.Data;
 using TeduShop.Model.Models;
 
-namespace TeduShop.Web.App_Start
+namespace TeduShop.Identity
 {
-    public class ApplicationUserStore : UserStore<AppUser>
-    {
-        public ApplicationUserStore(TeduShopDbContext context)
-            : base(context)
-        {
-        }
-    }
-
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<AppUser>
     {
@@ -60,38 +53,6 @@ namespace TeduShop.Web.App_Start
                     new DataProtectorTokenProvider<AppUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
-        }
-    }
-
-    public class ApplicationRoleManager : RoleManager<AppRole>
-    {
-        public ApplicationRoleManager(IRoleStore<AppRole, string> roleStore)
-            : base(roleStore)
-        {
-        }
-
-        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
-        {
-            return new ApplicationRoleManager(new RoleStore<AppRole>(context.Get<TeduShopDbContext>()));
-        }
-    }
-
-    // Configure the application sign-in manager which is used in this application.
-    public class ApplicationSignInManager : SignInManager<AppUser, string>
-    {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
-            : base(userManager, authenticationManager)
-        {
-        }
-
-        public override Task<ClaimsIdentity> CreateUserIdentityAsync(AppUser user)
-        {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager, DefaultAuthenticationTypes.ApplicationCookie);
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
 }

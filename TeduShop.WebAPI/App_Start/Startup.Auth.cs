@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using TeduShop.Data;
-using TeduShop.Model.Models;
+using TeduShop.Identity;
+using TeduShop.Web.Providers;
 
 [assembly: OwinStartup(typeof(TeduShop.Web.App_Start.Startup))]
 
@@ -35,56 +32,6 @@ namespace TeduShop.Web.App_Start
             });
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-        }
-
-        public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
-        {
-            public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
-            {
-                context.Validated();
-            }
-
-            public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
-            {
-                var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
-
-                if (allowedOrigin == null) allowedOrigin = "*";
-
-                context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-
-                UserManager<AppUser> userManager = context.OwinContext.GetUserManager<UserManager<AppUser>>();
-                AppUser user;
-                try
-                {
-                    user = await userManager.FindAsync(context.UserName, context.Password);
-                }
-                catch
-                {
-                    // Could not retrieve the user due to error.
-                    context.SetError("server_error");
-                    context.Rejected();
-                    return;
-                }
-                if (user != null)
-                {
-                    ClaimsIdentity identity = await userManager.CreateIdentityAsync(
-                                   user,
-                                   DefaultAuthenticationTypes.ExternalBearer);
-                    context.Validated(identity);
-                }
-                else
-                {
-                    context.SetError("invalid_grant", "Tài khoản hoặc mật khẩu không đúng.'");
-                    context.Rejected();
-                }
-            }
-        }
-
-        private static UserManager<AppUser> CreateManager(IdentityFactoryOptions<UserManager<AppUser>> options, IOwinContext context)
-        {
-            var userStore = new UserStore<AppUser>(context.Get<TeduShopDbContext>());
-            var owinManager = new UserManager<AppUser>(userStore);
-            return owinManager;
         }
     }
 }
