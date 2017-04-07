@@ -1,18 +1,12 @@
-﻿using System.Web.Http;
-using TeduShop.Service;
-using TeduShop.Web.Infrastructure.Core;
+﻿using System.Web.Mvc;
 
 namespace TeduShop.Web.Controllers
 {
-    [RoutePrefix("api/home")]
-    [Authorize]
-    public class HomeController : ApiControllerBase
+    public class HomeController : Controller
     {
-        private IErrorService _errorService;
-
-        public HomeController(IErrorService errorService) : base(errorService)
+        public ActionResult Index()
         {
-            this._errorService = errorService;
+            return Redirect("/Help");
         }
     }
 }

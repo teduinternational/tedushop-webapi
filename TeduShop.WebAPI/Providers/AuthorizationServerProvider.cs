@@ -9,6 +9,10 @@ namespace TeduShop.Web.Providers
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
+        public AuthorizationServerProvider()
+        {
+
+        }
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             context.Validated();
@@ -32,7 +36,7 @@ namespace TeduShop.Web.Providers
             catch
             {
                 // Could not retrieve the user due to error.
-                context.SetError("server_error");
+                context.SetError("server_error","Lỗi trong quá trình xử lý.");
                 context.Rejected();
                 return;
             }
@@ -40,8 +44,8 @@ namespace TeduShop.Web.Providers
             {
                 ClaimsIdentity identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer);
                 identity.AddClaim(new Claim("fullName", user.FullName));
-                identity.AddClaim(new Claim("avatar", user.Avatar));
-                identity.AddClaim(new Claim("email", user.Email));
+                identity.AddClaim(new Claim("avatar", string.IsNullOrEmpty(user.Avatar) ? "" : user.Avatar));
+                identity.AddClaim(new Claim("email", string.IsNullOrEmpty(user.Email) ? "" : user.Email));
 
                 context.Validated(identity);
             }

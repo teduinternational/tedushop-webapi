@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
 using TeduShop.Data;
 using TeduShop.Identity;
+using TeduShop.Model.Models;
 using TeduShop.Web.Providers;
 
 [assembly: OwinStartup(typeof(TeduShop.Web.App_Start.Startup))]
@@ -22,6 +25,7 @@ namespace TeduShop.Web.App_Start
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            app.CreatePerOwinContext<UserManager<AppUser>>(CreateManager);
 
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
             {
@@ -32,6 +36,14 @@ namespace TeduShop.Web.App_Start
             });
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+        }
+
+        private static UserManager<AppUser> CreateManager(IdentityFactoryOptions<UserManager<AppUser>> options, IOwinContext context)
+        {
+            var userStore = new UserStore<AppUser>(context.Get<TeduShopDbContext>());
+            var owinManager = new UserManager<AppUser>(userStore);
+
+            return owinManager;
         }
     }
 }
