@@ -12,7 +12,6 @@ namespace TeduShop.Data
         }
 
         public DbSet<Footer> Footers { set; get; }
-        public DbSet<Function> Menus { set; get; }
         public DbSet<Order> Orders { set; get; }
         public DbSet<OrderDetail> OrderDetails { set; get; }
         public DbSet<Page> Pages { set; get; }
@@ -34,6 +33,8 @@ namespace TeduShop.Data
         public DbSet<ContactDetail> ContactDetails { set; get; }
         public DbSet<Feedback> Feedbacks { set; get; }
 
+        public DbSet<Function> Functions { set; get; }
+        public DbSet<Permission> Permissions { set; get; }
         public static TeduShopDbContext Create()
         {
             return new TeduShopDbContext();

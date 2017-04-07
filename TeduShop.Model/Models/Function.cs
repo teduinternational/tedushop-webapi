@@ -26,8 +26,6 @@ namespace TeduShop.Model.Models
         [ForeignKey("ParentId")]
         public virtual Function Parent { set; get; }
 
-        [MaxLength(10)]
-        public string Target { set; get; }
 
         public bool Status { set; get; }
     }
