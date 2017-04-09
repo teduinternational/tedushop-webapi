@@ -50,11 +50,13 @@ namespace TeduShop.Web.Providers
                 identity.AddClaim(new Claim("fullName", user.FullName));
                 identity.AddClaim(new Claim("avatar", avatar));
                 identity.AddClaim(new Claim("email", email));
+                identity.AddClaim(new Claim("username", user.UserName));
                 var props = new AuthenticationProperties(new Dictionary<string, string>
                     {
                         {"fullName", user.FullName},
                         {"avatar", avatar },
-                        {"email", email}
+                        {"email", email},
+                        {"username", user.UserName}
                     });
                 context.Validated(new AuthenticationTicket(identity, props));
             }
