@@ -8,6 +8,7 @@ using Owin;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Mvc;
 using TeduShop.Data;
 using TeduShop.Data.Infrastructure;
