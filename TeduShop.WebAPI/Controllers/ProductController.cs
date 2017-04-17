@@ -84,8 +84,8 @@ namespace TeduShop.Web.Controllers
                 var paginationSet = new PaginationSet<ProductViewModel>()
                 {
                     Items = responseData,
-                    Page = page,
-                    TotalCount = totalRow,
+                    PageIndex = page,
+                    TotalRows = totalRow,
                     TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
                 };
                 var response = request.CreateResponse(HttpStatusCode.OK, paginationSet);
