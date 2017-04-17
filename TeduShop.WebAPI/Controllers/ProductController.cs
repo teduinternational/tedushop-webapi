@@ -86,7 +86,7 @@ namespace TeduShop.Web.Controllers
                     Items = responseData,
                     PageIndex = page,
                     TotalRows = totalRow,
-                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                    PageSize = pageSize
                 };
                 var response = request.CreateResponse(HttpStatusCode.OK, paginationSet);
                 return response;

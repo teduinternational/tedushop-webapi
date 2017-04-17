@@ -43,9 +43,9 @@ namespace TeduShop.Web.Controllers
                 PaginationSet<AppUserViewModel> pagedSet = new PaginationSet<AppUserViewModel>()
                 {
                     PageIndex = page,
+                    PageSize = pageSize,
                     TotalRows = totalRow,
-                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize),
-                    Items = modelVm
+                    Items = modelVm,
                 };
 
                 response = request.CreateResponse(HttpStatusCode.OK, pagedSet);

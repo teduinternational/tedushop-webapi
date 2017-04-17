@@ -49,7 +49,7 @@ namespace TeduShop.Web.Controllers
                 {
                     PageIndex = page,
                     TotalRows = totalRow,
-                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize),
+                    PageSize = pageSize,
                     Items = modelVm
                 };
 
