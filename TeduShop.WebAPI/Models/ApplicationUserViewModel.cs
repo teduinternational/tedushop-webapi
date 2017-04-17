@@ -15,6 +15,5 @@ namespace TeduShop.Web.Models
 
         public string PhoneNumber { set; get; }
 
-        public IEnumerable<ApplicationGroupViewModel> Groups { set; get; }
     }
 }

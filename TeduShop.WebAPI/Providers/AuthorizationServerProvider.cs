@@ -23,11 +23,6 @@ namespace TeduShop.Web.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            //var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
-
-            //if (allowedOrigin == null) allowedOrigin = "*";
-
-            //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
             UserManager<AppUser> userManager = context.OwinContext.GetUserManager<UserManager<AppUser>>();
             AppUser user;
