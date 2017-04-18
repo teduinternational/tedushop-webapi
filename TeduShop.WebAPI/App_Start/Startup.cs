@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
@@ -13,7 +14,6 @@ using System.Web.Mvc;
 using TeduShop.Data;
 using TeduShop.Data.Infrastructure;
 using TeduShop.Data.Repositories;
-using TeduShop.Identity;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 
@@ -39,11 +39,12 @@ namespace TeduShop.Web.App_Start
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
             builder.RegisterType<TeduShopDbContext>().AsSelf().InstancePerRequest();
-
+            builder.RegisterType<RoleStore<AppRole>>().As<IRoleStore<AppRole, string>>();
             //Asp.net Identity
             builder.RegisterType<ApplicationUserStore>().As<IUserStore<AppUser>>().InstancePerRequest();
             builder.RegisterType<ApplicationUserManager>().AsSelf().InstancePerRequest();
             builder.RegisterType<ApplicationSignInManager>().AsSelf().InstancePerRequest();
+
             builder.RegisterType<ApplicationRoleManager>().AsSelf().InstancePerRequest();
 
             builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).InstancePerRequest();

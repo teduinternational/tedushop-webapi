@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using TeduShop.Common.Exceptions;
-using TeduShop.Identity;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 using TeduShop.Web.App_Start;

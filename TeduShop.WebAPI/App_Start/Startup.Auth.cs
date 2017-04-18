@@ -7,7 +7,6 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
 using TeduShop.Data;
-using TeduShop.Identity;
 using TeduShop.Model.Models;
 using TeduShop.Web.Providers;
 
@@ -26,8 +25,12 @@ namespace TeduShop.Web.App_Start
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
             app.CreatePerOwinContext<UserManager<AppUser>>(CreateManager);
+
+            //Allow Cross origin for API
             app.UseCors(CorsOptions.AllowAll);
+
             app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/api/oauth/token"),

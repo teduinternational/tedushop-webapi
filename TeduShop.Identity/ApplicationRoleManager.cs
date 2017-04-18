@@ -14,7 +14,7 @@ namespace TeduShop.Identity
 {
     public class ApplicationRoleManager : RoleManager<AppRole>
     {
-        public ApplicationRoleManager(IRoleStore<AppRole, string> roleStore)
+        public ApplicationRoleManager(IRoleStore<AppRole,string> roleStore)
             : base(roleStore)
         {
         }

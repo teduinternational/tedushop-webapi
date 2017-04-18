@@ -237,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.cs" />
@@ -336,10 +337,6 @@
     <ProjectReference Include="..\TeduShop.Data\TeduShop.Data.csproj">
       <Project>{d573cfed-f642-4868-b921-4226cb26cdfe}</Project>
       <Name>TeduShop.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TeduShop.Identity\TeduShop.Identity.csproj">
-      <Project>{04c26787-4fa1-4fc2-8124-eb5c2bd5ecb1}</Project>
-      <Name>TeduShop.Identity</Name>
     </ProjectReference>
     <ProjectReference Include="..\TeduShop.Model\TeduShop.Model.csproj">
       <Project>{1a60e027-7b3b-4881-9ec3-2666b297cb43}</Project>
