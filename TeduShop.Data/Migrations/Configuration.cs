@@ -61,31 +61,35 @@
         private void CreateUser(TeduShopDbContext context)
         {
             var manager = new UserManager<AppUser>(new UserStore<AppUser>(new TeduShopDbContext()));
-
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new TeduShopDbContext()));
-
-            var user = new AppUser()
+            if (manager.Users.Count() == 0)
             {
-                UserName = "admin",
-                Email = "admin@tedu.com.vn",
-                EmailConfirmed = true,
-                BirthDay = DateTime.Now,
-                FullName = "ToanBN"
-            };
-            if (manager.Users.Count(x => x.UserName == "admin") == 0)
-            {
-                manager.Create(user, "123654$");
+                var roleManager = new RoleManager<AppRole>(new RoleStore<AppRole>(new TeduShopDbContext()));
 
-                if (!roleManager.Roles.Any())
+                var user = new AppUser()
                 {
-                    roleManager.Create(new IdentityRole { Name = "Admin" });
-                    roleManager.Create(new IdentityRole { Name = "User" });
+                    UserName = "admin",
+                    Email = "admin@tedu.com.vn",
+                    EmailConfirmed = true,
+                    BirthDay = DateTime.Now,
+                    FullName = "Bach Ngoc Toan",
+                    Avatar = "/src/assets/images/img.jpg"
+                };
+                if (manager.Users.Count(x => x.UserName == "admin") == 0)
+                {
+                    manager.Create(user, "123654$");
+
+                    if (!roleManager.Roles.Any())
+                    {
+                        roleManager.Create(new AppRole { Name = "Admin", Description = "Quản trị viên" });
+                        roleManager.Create(new AppRole { Name = "Member", Description = "Người dùng" });
+                    }
+
+                    var adminUser = manager.FindByName("admin");
+
+                    manager.AddToRoles(adminUser.Id, new string[] { "Admin", "Member" });
                 }
-
-                var adminUser = manager.FindByName("admin");
-
-                manager.AddToRoles(adminUser.Id, new string[] { "Admin", "User" });
             }
+
         }
 
         private void CreateProductCategorySample(TeduShop.Data.TeduShopDbContext context)

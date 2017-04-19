@@ -35,6 +35,7 @@ namespace TeduShop.Data
 
         public DbSet<Function> Functions { set; get; }
         public DbSet<Permission> Permissions { set; get; }
+        public DbSet<AppRole> AppRoles { set; get; }
 
         public static TeduShopDbContext Create()
         {
@@ -43,6 +44,7 @@ namespace TeduShop.Data
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {
+            builder.Entity<IdentityRole>().HasKey<string>(r => r.Id).ToTable("AppRoles");
             builder.Entity<IdentityUserRole>().HasKey(i => new { i.UserId, i.RoleId }).ToTable("AppUserRoles");
             builder.Entity<IdentityUserLogin>().HasKey(i => i.UserId).ToTable("AppUserLogins");
             builder.Entity<IdentityUserClaim>().HasKey(i => i.UserId).ToTable("AppUserClaims");

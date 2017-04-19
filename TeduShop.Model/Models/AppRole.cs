@@ -9,9 +9,14 @@ namespace TeduShop.Model.Models
     {
         public AppRole() : base()
         {
+
         }
 
-        [StringLength(250)]
-        public string Description { set; get; }
+
+        public AppRole(string name, string description) : base(name)
+        {
+            this.Description = description;
+        }
+        public virtual string Description { get; set; }
     }
 }

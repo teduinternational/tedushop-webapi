@@ -8,6 +8,32 @@ namespace TeduShop.Data.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.AppRoles",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Name = c.String(),
+                        Description = c.String(),
+                        Discriminator = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.AppUserRoles",
+                c => new
+                    {
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        RoleId = c.String(nullable: false, maxLength: 128),
+                        AppUser_Id = c.String(maxLength: 128),
+                        IdentityRole_Id = c.String(maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.AppUsers", t => t.AppUser_Id)
+                .ForeignKey("dbo.AppRoles", t => t.IdentityRole_Id)
+                .Index(t => t.AppUser_Id)
+                .Index(t => t.IdentityRole_Id);
+            
+            CreateTable(
                 "dbo.ContactDetails",
                 c => new
                     {
@@ -159,21 +185,6 @@ namespace TeduShop.Data.Migrations
                 .Index(t => t.AppUser_Id);
             
             CreateTable(
-                "dbo.AppUserRoles",
-                c => new
-                    {
-                        UserId = c.String(nullable: false, maxLength: 128),
-                        RoleId = c.String(nullable: false, maxLength: 128),
-                        AppUser_Id = c.String(maxLength: 128),
-                        IdentityRole_Id = c.String(maxLength: 128),
-                    })
-                .PrimaryKey(t => new { t.UserId, t.RoleId })
-                .ForeignKey("dbo.AppUsers", t => t.AppUser_Id)
-                .ForeignKey("dbo.IdentityRoles", t => t.IdentityRole_Id)
-                .Index(t => t.AppUser_Id)
-                .Index(t => t.IdentityRole_Id);
-            
-            CreateTable(
                 "dbo.Products",
                 c => new
                     {
@@ -263,15 +274,6 @@ namespace TeduShop.Data.Migrations
                 .ForeignKey("dbo.Functions", t => t.FunctionId, cascadeDelete: true)
                 .Index(t => t.RoleId)
                 .Index(t => t.FunctionId);
-            
-            CreateTable(
-                "dbo.IdentityRoles",
-                c => new
-                    {
-                        Id = c.String(nullable: false, maxLength: 128),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.PostCategories",
@@ -410,23 +412,11 @@ namespace TeduShop.Data.Migrations
                     })
                 .PrimaryKey(t => t.ID);
             
-            CreateTable(
-                "dbo.AppRoles",
-                c => new
-                    {
-                        Id = c.String(nullable: false, maxLength: 128),
-                        Description = c.String(maxLength: 250),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.IdentityRoles", t => t.Id)
-                .Index(t => t.Id);
-            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.AppRoles", "Id", "dbo.IdentityRoles");
-            DropForeignKey("dbo.AppUserRoles", "IdentityRole_Id", "dbo.IdentityRoles");
+            DropForeignKey("dbo.AppUserRoles", "IdentityRole_Id", "dbo.AppRoles");
             DropForeignKey("dbo.ProductTags", "TagID", "dbo.Tags");
             DropForeignKey("dbo.ProductTags", "ProductID", "dbo.Products");
             DropForeignKey("dbo.PostTags", "TagID", "dbo.Tags");
@@ -442,7 +432,6 @@ namespace TeduShop.Data.Migrations
             DropForeignKey("dbo.AppUserLogins", "AppUser_Id", "dbo.AppUsers");
             DropForeignKey("dbo.AppUserClaims", "AppUser_Id", "dbo.AppUsers");
             DropForeignKey("dbo.Functions", "ParentId", "dbo.Functions");
-            DropIndex("dbo.AppRoles", new[] { "Id" });
             DropIndex("dbo.ProductTags", new[] { "TagID" });
             DropIndex("dbo.ProductTags", new[] { "ProductID" });
             DropIndex("dbo.PostTags", new[] { "TagID" });
@@ -451,15 +440,14 @@ namespace TeduShop.Data.Migrations
             DropIndex("dbo.Permissions", new[] { "FunctionId" });
             DropIndex("dbo.Permissions", new[] { "RoleId" });
             DropIndex("dbo.Products", new[] { "CategoryID" });
-            DropIndex("dbo.AppUserRoles", new[] { "IdentityRole_Id" });
-            DropIndex("dbo.AppUserRoles", new[] { "AppUser_Id" });
             DropIndex("dbo.AppUserLogins", new[] { "AppUser_Id" });
             DropIndex("dbo.AppUserClaims", new[] { "AppUser_Id" });
             DropIndex("dbo.Orders", new[] { "CustomerId" });
             DropIndex("dbo.OrderDetails", new[] { "ProductID" });
             DropIndex("dbo.OrderDetails", new[] { "OrderID" });
             DropIndex("dbo.Functions", new[] { "ParentId" });
-            DropTable("dbo.AppRoles");
+            DropIndex("dbo.AppUserRoles", new[] { "IdentityRole_Id" });
+            DropIndex("dbo.AppUserRoles", new[] { "AppUser_Id" });
             DropTable("dbo.VisitorStatistics");
             DropTable("dbo.SystemConfigs");
             DropTable("dbo.SupportOnlines");
@@ -469,12 +457,10 @@ namespace TeduShop.Data.Migrations
             DropTable("dbo.PostTags");
             DropTable("dbo.Posts");
             DropTable("dbo.PostCategories");
-            DropTable("dbo.IdentityRoles");
             DropTable("dbo.Permissions");
             DropTable("dbo.Pages");
             DropTable("dbo.ProductCategories");
             DropTable("dbo.Products");
-            DropTable("dbo.AppUserRoles");
             DropTable("dbo.AppUserLogins");
             DropTable("dbo.AppUserClaims");
             DropTable("dbo.AppUsers");
@@ -485,6 +471,8 @@ namespace TeduShop.Data.Migrations
             DropTable("dbo.Feedbacks");
             DropTable("dbo.Errors");
             DropTable("dbo.ContactDetails");
+            DropTable("dbo.AppUserRoles");
+            DropTable("dbo.AppRoles");
         }
     }
 }
