@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,19 @@ namespace TeduShop.Web.Controllers
     [Authorize]
     public class AppRoleController : ApiControllerBase
     {
-        private ApplicationRoleManager _roleManager;
+        private ApplicationRoleManager _roleManager = null;
 
-        public AppRoleController(IErrorService errorService, ApplicationRoleManager roleManager) : base(errorService)
+        public AppRoleController(IErrorService errorService) : base(errorService)
         {
-            _roleManager = roleManager;
+        }
+        //Code removed from brevity
+
+        protected ApplicationRoleManager AppRoleManager
+        {
+            get
+            {
+                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
         }
 
         [Route("getlistpaging")]
@@ -35,7 +44,7 @@ namespace TeduShop.Web.Controllers
             {
                 HttpResponseMessage response = null;
                 int totalRow = 0;
-                var query = _roleManager.Roles;
+                var query = AppRoleManager.Roles;
                 if (!string.IsNullOrEmpty(filter))
                     query = query.Where(x => x.Description.Contains(filter));
                 totalRow = query.Count();
@@ -65,7 +74,7 @@ namespace TeduShop.Web.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response = null;
-                var model = _roleManager.Roles.ToList();
+                var model = AppRoleManager.Roles.ToList();
                 IEnumerable<ApplicationRoleViewModel> modelVm = Mapper.Map<IEnumerable<AppRole>, IEnumerable<ApplicationRoleViewModel>>(model);
 
                 response = request.CreateResponse(HttpStatusCode.OK, modelVm);
@@ -100,7 +109,7 @@ namespace TeduShop.Web.Controllers
                 newAppRole.UpdateApplicationRole(applicationRoleViewModel);
                 try
                 {
-                    _roleManager.Create(newAppRole);
+                    AppRoleManager.Create(newAppRole);
                     return request.CreateResponse(HttpStatusCode.OK, applicationRoleViewModel);
                 }
                 catch (NameDuplicatedException dex)
@@ -124,7 +133,7 @@ namespace TeduShop.Web.Controllers
                 try
                 {
                     appRole.UpdateApplicationRole(applicationRoleViewModel, "update");
-                    _roleManager.Update(appRole);
+                    AppRoleManager.Update(appRole);
                     return request.CreateResponse(HttpStatusCode.OK, appRole);
                 }
                 catch (NameDuplicatedException dex)
@@ -142,9 +151,9 @@ namespace TeduShop.Web.Controllers
         [Route("delete")]
         public HttpResponseMessage Delete(HttpRequestMessage request, string id)
         {
-            var appRole = _roleManager.FindById(id);
+            var appRole = AppRoleManager.FindById(id);
 
-            _roleManager.Delete(appRole);
+            AppRoleManager.Delete(appRole);
             return request.CreateResponse(HttpStatusCode.OK, id);
         }
     }
