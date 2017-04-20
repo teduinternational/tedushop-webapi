@@ -129,7 +129,7 @@ namespace TeduShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appRole = _roleManager.FindById(applicationRoleViewModel.Id);
+                var appRole = AppRoleManager.FindById(applicationRoleViewModel.Id);
                 try
                 {
                     appRole.UpdateApplicationRole(applicationRoleViewModel, "update");
