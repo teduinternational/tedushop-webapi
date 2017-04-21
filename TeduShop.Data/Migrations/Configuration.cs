@@ -72,7 +72,9 @@
                     EmailConfirmed = true,
                     BirthDay = DateTime.Now,
                     FullName = "Bach Ngoc Toan",
-                    Avatar = "/src/assets/images/img.jpg"
+                    Avatar = "/src/assets/images/img.jpg",
+                    Gender= true,
+                    Status = true
                 };
                 if (manager.Users.Count(x => x.UserName == "admin") == 0)
                 {

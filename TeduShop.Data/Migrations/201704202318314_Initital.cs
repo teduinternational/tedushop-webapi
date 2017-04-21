@@ -3,7 +3,7 @@ namespace TeduShop.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class Initital : DbMigration
     {
         public override void Up()
         {
@@ -143,6 +143,8 @@ namespace TeduShop.Data.Migrations
                         Address = c.String(maxLength: 256),
                         Avatar = c.String(),
                         BirthDay = c.DateTime(),
+                        Status = c.Boolean(),
+                        Gender = c.Boolean(),
                         Email = c.String(),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),

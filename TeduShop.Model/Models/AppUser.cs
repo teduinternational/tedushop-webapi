@@ -22,6 +22,10 @@ namespace TeduShop.Model.Models
 
         public DateTime? BirthDay { set; get; }
 
+        public bool? Status { get; set; }
+
+        public bool? Gender { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager, string authenticationType)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
