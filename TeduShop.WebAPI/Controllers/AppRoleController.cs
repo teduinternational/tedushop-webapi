@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -26,6 +25,7 @@ namespace TeduShop.Web.Controllers
         public AppRoleController(IErrorService errorService) : base(errorService)
         {
         }
+
         //Code removed from brevity
 
         protected ApplicationRoleManager AppRoleManager

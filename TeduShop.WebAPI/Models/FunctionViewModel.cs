@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 
-namespace TeduShop.Model.Models
+namespace TeduShop.Web.Models
 {
-    [Table("Functions")]
-    public class Function
+    public class FunctionViewModel
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { set; get; }
 
         [Required]
@@ -22,8 +22,9 @@ namespace TeduShop.Model.Models
 
         public int? ParentId { set; get; }
 
-        [ForeignKey("ParentId")]
-        public virtual Function Parent { set; get; }
+        public FunctionViewModel Parent { set; get; }
+
+        public ICollection<FunctionViewModel> ChildFunctions { set; get; }
 
 
         public bool Status { set; get; }

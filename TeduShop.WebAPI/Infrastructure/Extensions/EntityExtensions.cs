@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using TeduShop.Model.Models;
 using TeduShop.Web.Models;
 
@@ -133,10 +134,14 @@ namespace TeduShop.Web.Infrastructure.Extensions
         {
             appUser.Id = appUserViewModel.Id;
             appUser.FullName = appUserViewModel.FullName;
-            appUser.BirthDay = appUserViewModel.BirthDay;
+            DateTime dateTime= DateTime.ParseExact(appUserViewModel.BirthDay, "MM/DD/YYYY", new CultureInfo("vi-VN"));
+            appUser.BirthDay = dateTime;
             appUser.Email = appUserViewModel.Email;
             appUser.UserName = appUserViewModel.UserName;
             appUser.PhoneNumber = appUserViewModel.PhoneNumber;
+            appUser.Gender = appUserViewModel.Gender;
+            appUser.Status = appUserViewModel.Status;
+            appUser.Address = appUserViewModel.Address;
         }
     }
 }

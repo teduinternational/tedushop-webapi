@@ -22,6 +22,7 @@ namespace TeduShop.Web.Mappings
                 cfg.CreateMap<ContactDetail, ContactDetailViewModel>();
                 cfg.CreateMap<AppRole, ApplicationRoleViewModel>();
                 cfg.CreateMap<AppUser, AppUserViewModel>();
+                cfg.CreateMap<Function, FunctionViewModel>();
             });
         }
     }

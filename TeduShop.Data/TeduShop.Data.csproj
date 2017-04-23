@@ -68,12 +68,21 @@
     <Compile Include="Migrations\201704202318314_Initital.Designer.cs">
       <DependentUpon>201704202318314_Initital.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704221451270_ParentIdFunction.cs" />
+    <Compile Include="Migrations\201704221451270_ParentIdFunction.Designer.cs">
+      <DependentUpon>201704221451270_ParentIdFunction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704221456234_AddIconclass.cs" />
+    <Compile Include="Migrations\201704221456234_AddIconclass.Designer.cs">
+      <DependentUpon>201704221456234_AddIconclass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ContactDetailRepository.cs" />
     <Compile Include="Repositories\ErrorRepository.cs" />
     <Compile Include="Repositories\FeedbackRepository.cs" />
     <Compile Include="Repositories\FooterRepository.cs" />
+    <Compile Include="Repositories\FunctionRepository.cs" />
     <Compile Include="Repositories\MenuRepository.cs" />
     <Compile Include="Repositories\OrderDetailRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
@@ -108,6 +117,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704202318314_Initital.resx">
       <DependentUpon>201704202318314_Initital.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704221451270_ParentIdFunction.resx">
+      <DependentUpon>201704221451270_ParentIdFunction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704221456234_AddIconclass.resx">
+      <DependentUpon>201704221456234_AddIconclass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
