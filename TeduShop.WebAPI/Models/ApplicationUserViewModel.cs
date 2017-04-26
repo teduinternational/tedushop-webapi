@@ -14,10 +14,11 @@ namespace TeduShop.Web.Models
         public string UserName { set; get; }
         public string Address { get; set; }
         public string PhoneNumber { set; get; }
-        public HttpPostedFileBase AvatarFile { set; get; }
         public string Avatar { get; set; }
         public bool Status { get; set; }
 
-        public bool? Gender { get; set; }
+        public string Gender { get; set; }
+
+        public ICollection<ApplicationRoleViewModel> Roles { get; set; }
     }
 }

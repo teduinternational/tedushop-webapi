@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
@@ -7,18 +8,37 @@ using System.Net.Http;
 using System.Web.Http;
 using TeduShop.Model.Models;
 using TeduShop.Service;
+using TeduShop.Web.App_Start;
 
 namespace TeduShop.Web.Infrastructure.Core
 {
     public class ApiControllerBase : ApiController
     {
         private IErrorService _errorService;
+        private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public ApiControllerBase(IErrorService errorService)
         {
             this._errorService = errorService;
         }
+        //Code removed from brevity
 
+        protected ApplicationRoleManager AppRoleManager
+        {
+            get
+            {
+                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
+        }
+
+        protected ApplicationUserManager AppUserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
         protected HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> function)
         {
             HttpResponseMessage response = null;

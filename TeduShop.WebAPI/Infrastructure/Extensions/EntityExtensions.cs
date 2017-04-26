@@ -134,12 +134,17 @@ namespace TeduShop.Web.Infrastructure.Extensions
         {
             appUser.Id = appUserViewModel.Id;
             appUser.FullName = appUserViewModel.FullName;
-            DateTime dateTime= DateTime.ParseExact(appUserViewModel.BirthDay, "MM/DD/YYYY", new CultureInfo("vi-VN"));
-            appUser.BirthDay = dateTime;
+            if (!string.IsNullOrEmpty(appUserViewModel.BirthDay))
+            {
+                DateTime dateTime = DateTime.ParseExact(appUserViewModel.BirthDay, "dd/MM/yyyy", new CultureInfo("vi-VN"));
+                appUser.BirthDay = dateTime;
+            }
+
             appUser.Email = appUserViewModel.Email;
+            appUser.Address = appUserViewModel.Address;
             appUser.UserName = appUserViewModel.UserName;
             appUser.PhoneNumber = appUserViewModel.PhoneNumber;
-            appUser.Gender = appUserViewModel.Gender;
+            appUser.Gender = appUserViewModel.Gender == "True" ? true : false;
             appUser.Status = appUserViewModel.Status;
             appUser.Address = appUserViewModel.Address;
         }

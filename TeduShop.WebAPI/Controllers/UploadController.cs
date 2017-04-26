@@ -59,11 +59,16 @@ namespace TeduShop.Web.Controllers
                         }
                         else
                         {
-                            string path = Path.Combine("/UploadedFiles/Avatars/", postedFile.FileName);
-                            var filePath = HttpContext.Current.Server.MapPath("~/UploadedFiles/Avatars/" + postedFile.FileName);
+                            var directory = "/UploadedFiles/Avatars/";
+                            if (!Directory.Exists(HttpContext.Current.Server.MapPath(directory)))
+                            {
+                                Directory.CreateDirectory(HttpContext.Current.Server.MapPath(directory));
+                            }
+
+                            string path = Path.Combine(HttpContext.Current.Server.MapPath(directory), postedFile.FileName);
                             //Userimage myfolder name where i want to save my image
-                            postedFile.SaveAs(filePath);
-                            return Request.CreateResponse(HttpStatusCode.OK, path);
+                            postedFile.SaveAs(path);
+                            return Request.CreateResponse(HttpStatusCode.OK, Path.Combine(directory, postedFile.FileName));
                         }
                     }
 

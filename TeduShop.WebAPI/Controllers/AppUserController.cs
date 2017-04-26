@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,14 +20,10 @@ namespace TeduShop.Web.Controllers
     [RoutePrefix("api/appUser")]
     public class AppUserController : ApiControllerBase
     {
-        private ApplicationUserManager _userManager;
 
-        public AppUserController(
-            ApplicationUserManager userManager,
-            IErrorService errorService)
+        public AppUserController(IErrorService errorService)
             : base(errorService)
         {
-            _userManager = userManager;
         }
 
         [Route("getlistpaging")]
@@ -37,7 +34,7 @@ namespace TeduShop.Web.Controllers
             {
                 HttpResponseMessage response = null;
                 int totalRow = 0;
-                var model = _userManager.Users;
+                var model = AppUserManager.Users;
                 IEnumerable<AppUserViewModel> modelVm = Mapper.Map<IEnumerable<AppUser>, IEnumerable<AppUserViewModel>>(model);
 
                 PaginationSet<AppUserViewModel> pagedSet = new PaginationSet<AppUserViewModel>()
@@ -57,20 +54,30 @@ namespace TeduShop.Web.Controllers
         [Route("detail/{id}")]
         [HttpGet]
         //[Authorize(Roles = "ViewUser")]
-        public HttpResponseMessage Details(HttpRequestMessage request, string id)
+        public async Task<HttpResponseMessage> Details(HttpRequestMessage request, string id)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
             }
-            var user = _userManager.FindByIdAsync(id);
+            var user = await AppUserManager.FindByIdAsync(id);
             if (user == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
             else
             {
-                var applicationUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(user.Result);
+                var applicationUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(user);
+
+                var listRoles = Mapper.Map<ICollection<AppRole>, ICollection<ApplicationRoleViewModel>>(AppRoleManager.Roles.ToList());
+                foreach (var role in listRoles)
+                {
+                    if (user.Roles.Select(x => x.RoleId).Contains(role.Id))
+                    {
+                        role.Checked = true;
+                    }
+                }
+                applicationUserViewModel.Roles = listRoles;
                 return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
             }
         }
@@ -87,9 +94,12 @@ namespace TeduShop.Web.Controllers
                 try
                 {
                     newAppUser.Id = Guid.NewGuid().ToString();
-                    var result = await _userManager.CreateAsync(newAppUser, applicationUserViewModel.Password);
+                    var result = await AppUserManager.CreateAsync(newAppUser, applicationUserViewModel.Password);
                     if (result.Succeeded)
                     {
+                        var roles = applicationUserViewModel.Roles.Where(x => x.Checked).Select(x => x.Name).ToArray();
+                        await AppUserManager.AddToRolesAsync(newAppUser.Id, roles);
+
                         return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
                     }
                     else
@@ -117,13 +127,19 @@ namespace TeduShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appUser = await _userManager.FindByIdAsync(applicationUserViewModel.Id);
+                var appUser = await AppUserManager.FindByIdAsync(applicationUserViewModel.Id);
                 try
                 {
                     appUser.UpdateUser(applicationUserViewModel);
-                    var result = await _userManager.UpdateAsync(appUser);
+                    var result = await AppUserManager.UpdateAsync(appUser);
                     if (result.Succeeded)
                     {
+                        var userRoles = await AppUserManager.GetRolesAsync(appUser.Id);
+                        var selectedRole = applicationUserViewModel.Roles.Where(x => x.Checked).Select(x => x.Name).ToArray();
+
+                        selectedRole = selectedRole ?? new string[] { };
+
+                        await AppUserManager.AddToRolesAsync(appUser.Id, selectedRole.Except(userRoles).ToArray());
                         return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
                     }
                     else
@@ -145,8 +161,8 @@ namespace TeduShop.Web.Controllers
         //[Authorize(Roles ="DeleteUser")]
         public async Task<HttpResponseMessage> Delete(HttpRequestMessage request, string id)
         {
-            var appUser = await _userManager.FindByIdAsync(id);
-            var result = await _userManager.DeleteAsync(appUser);
+            var appUser = await AppUserManager.FindByIdAsync(id);
+            var result = await AppUserManager.DeleteAsync(appUser);
             if (result.Succeeded)
                 return request.CreateResponse(HttpStatusCode.OK, id);
             else

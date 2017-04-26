@@ -20,22 +20,10 @@ namespace TeduShop.Web.Controllers
     [Authorize]
     public class AppRoleController : ApiControllerBase
     {
-        private ApplicationRoleManager _roleManager = null;
-
         public AppRoleController(IErrorService errorService) : base(errorService)
         {
         }
-
-        //Code removed from brevity
-
-        protected ApplicationRoleManager AppRoleManager
-        {
-            get
-            {
-                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
-            }
-        }
-
+       
         [Route("getlistpaging")]
         [HttpGet]
         public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
@@ -91,7 +79,7 @@ namespace TeduShop.Web.Controllers
             {
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
             }
-            AppRole appRole = _roleManager.FindById(id);
+            AppRole appRole = AppRoleManager.FindById(id);
             if (appRole == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "No group");
