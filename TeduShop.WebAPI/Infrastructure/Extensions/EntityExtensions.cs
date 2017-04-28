@@ -147,6 +147,7 @@ namespace TeduShop.Web.Infrastructure.Extensions
             appUser.Gender = appUserViewModel.Gender == "True" ? true : false;
             appUser.Status = appUserViewModel.Status;
             appUser.Address = appUserViewModel.Address;
+            appUser.Avatar = appUserViewModel.Avatar;
         }
     }
 }

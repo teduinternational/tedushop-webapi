@@ -11,6 +11,5 @@ namespace TeduShop.Web.Models
 
         public string Description { set; get; }
 
-        public bool Checked { get; set; }
     }
 }

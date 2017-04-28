@@ -236,3 +236,4 @@ _Pvt_Extensions
 .fake/
 TeduShop.Web/UploadedFiles/
 /TeduShop.Web/Reports
+/TeduShop.WebAPI/UploadedFiles/Avatars

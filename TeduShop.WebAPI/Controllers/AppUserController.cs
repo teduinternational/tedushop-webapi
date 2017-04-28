@@ -67,17 +67,9 @@ namespace TeduShop.Web.Controllers
             }
             else
             {
+                var roles = await AppUserManager.GetRolesAsync(user.Id);
                 var applicationUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(user);
-
-                var listRoles = Mapper.Map<ICollection<AppRole>, ICollection<ApplicationRoleViewModel>>(AppRoleManager.Roles.ToList());
-                foreach (var role in listRoles)
-                {
-                    if (user.Roles.Select(x => x.RoleId).Contains(role.Id))
-                    {
-                        role.Checked = true;
-                    }
-                }
-                applicationUserViewModel.Roles = listRoles;
+                applicationUserViewModel.Roles = roles;
                 return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
             }
         }
@@ -97,7 +89,7 @@ namespace TeduShop.Web.Controllers
                     var result = await AppUserManager.CreateAsync(newAppUser, applicationUserViewModel.Password);
                     if (result.Succeeded)
                     {
-                        var roles = applicationUserViewModel.Roles.Where(x => x.Checked).Select(x => x.Name).ToArray();
+                        var roles = applicationUserViewModel.Roles.ToArray();
                         await AppUserManager.AddToRolesAsync(newAppUser.Id, roles);
 
                         return request.CreateResponse(HttpStatusCode.OK, applicationUserViewModel);
@@ -135,7 +127,7 @@ namespace TeduShop.Web.Controllers
                     if (result.Succeeded)
                     {
                         var userRoles = await AppUserManager.GetRolesAsync(appUser.Id);
-                        var selectedRole = applicationUserViewModel.Roles.Where(x => x.Checked).Select(x => x.Name).ToArray();
+                        var selectedRole = applicationUserViewModel.Roles.ToArray();
 
                         selectedRole = selectedRole ?? new string[] { };
 

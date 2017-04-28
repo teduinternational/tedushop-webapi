@@ -19,6 +19,6 @@ namespace TeduShop.Web.Models
 
         public string Gender { get; set; }
 
-        public ICollection<ApplicationRoleViewModel> Roles { get; set; }
+        public ICollection<string> Roles { get; set; }
     }
 }
