@@ -253,9 +253,9 @@ namespace TeduShop.Service
         public bool SellProduct(int productId, int quantity)
         {
             var product = _productRepository.GetSingleById(productId);
-            if (product.Quantity < quantity)
-                return false;
-            product.Quantity -= quantity;
+            //if (product.Quantity < quantity)
+            //    return false;
+            //product.Quantity -= quantity;
             return true;
         }
 

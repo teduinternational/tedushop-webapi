@@ -28,6 +28,8 @@
             CreateConfigTitle(context);
             CreateFooter(context);
             CreateUser(context);
+            CreateSize(context);
+            CreateColor(context);
         }
 
         private void CreateConfigTitle(TeduShopDbContext context)
@@ -73,7 +75,7 @@
                     BirthDay = DateTime.Now,
                     FullName = "Bach Ngoc Toan",
                     Avatar = "/src/assets/images/img.jpg",
-                    Gender= true,
+                    Gender = true,
                     Status = true
                 };
                 if (manager.Users.Count(x => x.UserName == "admin") == 0)
@@ -91,7 +93,6 @@
                     manager.AddToRoles(adminUser.Id, new string[] { "Admin", "Member" });
                 }
             }
-
         }
 
         private void CreateProductCategorySample(TeduShop.Data.TeduShopDbContext context)
@@ -100,16 +101,48 @@
             {
                 List<ProductCategory> listProductCategory = new List<ProductCategory>()
                 {
-                    new ProductCategory() { Name="Điện lạnh",Alias="dien-lanh",Status=true },
-                    new ProductCategory() { Name="Viễn thông",Alias="vien-thong",Status=true },
-                    new ProductCategory() { Name="Đồ gia dụng",Alias="do-gia-dung",Status=true },
-                    new ProductCategory() { Name="Mỹ phẩm",Alias="my-pham",Status=true }
+                    new ProductCategory() { Name="Áo nam",Alias="ao-nam",Status=true },
+                    new ProductCategory() { Name="Áo nữ",Alias="ao-nu",Status=true },
+                    new ProductCategory() { Name="Giày nam",Alias="giay-nam",Status=true },
+                    new ProductCategory() { Name="Giày nữ",Alias="giay-nu",Status=true }
                 };
                 context.ProductCategories.AddRange(listProductCategory);
                 context.SaveChanges();
             }
         }
+        private void CreateSize(TeduShop.Data.TeduShopDbContext context)
+        {
+            if (context.Sizes.Count() == 0)
+            {
+                List<Size> listSize = new List<Size>()
+                {
+                    new Size() { Name="XXL" },
+                    new Size() { Name="XL"},
+                    new Size() { Name="L" },
+                    new Size() { Name="M" },
+                    new Size() { Name="S" },
+                    new Size() { Name="XS" }
+                };
+                context.Sizes.AddRange(listSize);
+                context.SaveChanges();
+            }
+        }
 
+        private void CreateColor(TeduShop.Data.TeduShopDbContext context)
+        {
+            if (context.Colors.Count() == 0)
+            {
+                List<Color> listColor = new List<Color>()
+                {
+                    new Color() {Name="Đen", Code="#000000" },
+                    new Color() {Name="Trắng", Code="#FFFFFF"},
+                    new Color() {Name="Đỏ", Code="#ff0000" },
+                    new Color() {Name="Xanh", Code="#1000ff" },
+                };
+                context.Colors.AddRange(listColor);
+                context.SaveChanges();
+            }
+        }
         private void CreateFooter(TeduShopDbContext context)
         {
             if (context.Footers.Count(x => x.ID == CommonConstants.DefaultFooterId) == 0)

@@ -76,8 +76,7 @@ namespace TeduShop.Web.Infrastructure.Extensions
             product.Alias = productVm.Alias;
             product.CategoryID = productVm.CategoryID;
             product.Content = productVm.Content;
-            product.Image = productVm.Image;
-            product.MoreImages = productVm.MoreImages;
+            product.ThumbnailImage = productVm.ThumbnailImage;
             product.Price = productVm.Price;
             product.PromotionPrice = productVm.PromotionPrice;
             product.Warranty = productVm.Warranty;
@@ -93,7 +92,6 @@ namespace TeduShop.Web.Infrastructure.Extensions
             product.MetaDescription = productVm.MetaDescription;
             product.Status = productVm.Status;
             product.Tags = productVm.Tags;
-            product.Quantity = productVm.Quantity;
             product.OriginalPrice = productVm.OriginalPrice;
         }
 

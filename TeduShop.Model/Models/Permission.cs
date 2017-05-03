@@ -11,12 +11,15 @@ namespace TeduShop.Model.Models
 
         [StringLength(128)]
         public string RoleId { get; set; }
+
         public int FunctionId { get; set; }
 
-        public bool CanCreate { set; get; }
+        public bool CanCreate { set; get; } 
+
         public bool CanRead { set; get; }
 
         public bool CanUpdate { set; get; }
+
         public bool CanDelete { set; get; }
 
         [ForeignKey("RoleId")]

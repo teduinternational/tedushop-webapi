@@ -3,7 +3,7 @@ namespace TeduShop.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initital : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -32,6 +32,16 @@ namespace TeduShop.Data.Migrations
                 .ForeignKey("dbo.AppRoles", t => t.IdentityRole_Id)
                 .Index(t => t.AppUser_Id)
                 .Index(t => t.IdentityRole_Id);
+            
+            CreateTable(
+                "dbo.Colors",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        Name = c.String(maxLength: 250),
+                        Code = c.String(maxLength: 250),
+                    })
+                .PrimaryKey(t => t.ID);
             
             CreateTable(
                 "dbo.ContactDetails",
@@ -91,8 +101,9 @@ namespace TeduShop.Data.Migrations
                         Name = c.String(nullable: false, maxLength: 50),
                         URL = c.String(nullable: false, maxLength: 256),
                         DisplayOrder = c.Int(nullable: false),
-                        ParentId = c.Int(nullable: false),
+                        ParentId = c.Int(),
                         Status = c.Boolean(nullable: false),
+                        IconCss = c.String(),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.Functions", t => t.ParentId)
@@ -194,10 +205,11 @@ namespace TeduShop.Data.Migrations
                         Name = c.String(nullable: false, maxLength: 256),
                         Alias = c.String(nullable: false, maxLength: 256),
                         CategoryID = c.Int(nullable: false),
-                        Image = c.String(maxLength: 256),
-                        MoreImages = c.String(storeType: "xml"),
+                        ThumbnailImage = c.String(maxLength: 256),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        OriginalPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
                         PromotionPrice = c.Decimal(precision: 18, scale: 2),
+                        IncludedVAT = c.Boolean(nullable: false),
                         Warranty = c.Int(),
                         Description = c.String(maxLength: 500),
                         Content = c.String(),
@@ -205,8 +217,6 @@ namespace TeduShop.Data.Migrations
                         HotFlag = c.Boolean(),
                         ViewCount = c.Int(),
                         Tags = c.String(),
-                        Quantity = c.Int(nullable: false),
-                        OriginalPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
                         CreatedDate = c.DateTime(),
                         CreatedBy = c.String(maxLength: 256),
                         UpdatedDate = c.DateTime(),
@@ -229,6 +239,7 @@ namespace TeduShop.Data.Migrations
                         Description = c.String(maxLength: 500),
                         ParentID = c.Int(),
                         DisplayOrder = c.Int(),
+                        HomeOrder = c.Int(),
                         Image = c.String(maxLength: 256),
                         HomeFlag = c.Boolean(),
                         CreatedDate = c.DateTime(),
@@ -349,6 +360,58 @@ namespace TeduShop.Data.Migrations
                 .PrimaryKey(t => t.ID);
             
             CreateTable(
+                "dbo.ProductColors",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        ProductId = c.Int(nullable: false),
+                        ColorId = c.Int(nullable: false),
+                        Quantity = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Colors", t => t.ColorId, cascadeDelete: true)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId)
+                .Index(t => t.ColorId);
+            
+            CreateTable(
+                "dbo.ProductImages",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        ProductId = c.Int(nullable: false),
+                        Path = c.String(maxLength: 250),
+                        Caption = c.String(maxLength: 250),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId);
+            
+            CreateTable(
+                "dbo.ProductSizes",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        ProductId = c.Int(nullable: false),
+                        SizeId = c.Int(nullable: false),
+                        Quantity = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .ForeignKey("dbo.Sizes", t => t.SizeId, cascadeDelete: true)
+                .Index(t => t.ProductId)
+                .Index(t => t.SizeId);
+            
+            CreateTable(
+                "dbo.Sizes",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        Name = c.String(maxLength: 250),
+                    })
+                .PrimaryKey(t => t.ID);
+            
+            CreateTable(
                 "dbo.ProductTags",
                 c => new
                     {
@@ -421,6 +484,11 @@ namespace TeduShop.Data.Migrations
             DropForeignKey("dbo.AppUserRoles", "IdentityRole_Id", "dbo.AppRoles");
             DropForeignKey("dbo.ProductTags", "TagID", "dbo.Tags");
             DropForeignKey("dbo.ProductTags", "ProductID", "dbo.Products");
+            DropForeignKey("dbo.ProductSizes", "SizeId", "dbo.Sizes");
+            DropForeignKey("dbo.ProductSizes", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.ProductImages", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.ProductColors", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.ProductColors", "ColorId", "dbo.Colors");
             DropForeignKey("dbo.PostTags", "TagID", "dbo.Tags");
             DropForeignKey("dbo.PostTags", "PostID", "dbo.Posts");
             DropForeignKey("dbo.Posts", "CategoryID", "dbo.PostCategories");
@@ -436,6 +504,11 @@ namespace TeduShop.Data.Migrations
             DropForeignKey("dbo.Functions", "ParentId", "dbo.Functions");
             DropIndex("dbo.ProductTags", new[] { "TagID" });
             DropIndex("dbo.ProductTags", new[] { "ProductID" });
+            DropIndex("dbo.ProductSizes", new[] { "SizeId" });
+            DropIndex("dbo.ProductSizes", new[] { "ProductId" });
+            DropIndex("dbo.ProductImages", new[] { "ProductId" });
+            DropIndex("dbo.ProductColors", new[] { "ColorId" });
+            DropIndex("dbo.ProductColors", new[] { "ProductId" });
             DropIndex("dbo.PostTags", new[] { "TagID" });
             DropIndex("dbo.PostTags", new[] { "PostID" });
             DropIndex("dbo.Posts", new[] { "CategoryID" });
@@ -455,6 +528,10 @@ namespace TeduShop.Data.Migrations
             DropTable("dbo.SupportOnlines");
             DropTable("dbo.Slides");
             DropTable("dbo.ProductTags");
+            DropTable("dbo.Sizes");
+            DropTable("dbo.ProductSizes");
+            DropTable("dbo.ProductImages");
+            DropTable("dbo.ProductColors");
             DropTable("dbo.Tags");
             DropTable("dbo.PostTags");
             DropTable("dbo.Posts");
@@ -473,6 +550,7 @@ namespace TeduShop.Data.Migrations
             DropTable("dbo.Feedbacks");
             DropTable("dbo.Errors");
             DropTable("dbo.ContactDetails");
+            DropTable("dbo.Colors");
             DropTable("dbo.AppUserRoles");
             DropTable("dbo.AppRoles");
         }

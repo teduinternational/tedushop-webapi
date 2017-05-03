@@ -27,7 +27,6 @@ namespace TeduShop.Model.Models
 
         public DateTime CreatedDate { set; get; }
 
-        [Required]
         public bool Status { set; get; }
     }
 }

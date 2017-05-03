@@ -13,13 +13,14 @@ namespace TeduShop.Web.Models
 
         public int CategoryID { set; get; }
 
-        public string Image { set; get; }
-
-        public string MoreImages { set; get; }
+        public string ThumbnailImage { set; get; }
 
         public decimal Price { set; get; }
 
         public decimal? PromotionPrice { set; get; }
+
+        public bool IncludedVAT { get; set; }
+
 
         public int? Warranty { set; get; }
 
@@ -49,7 +50,6 @@ namespace TeduShop.Web.Models
 
         public string Tags { set; get; }
 
-        public int Quantity { set; get; }
 
         public decimal OriginalPrice { set; get; }
         public virtual ProductCategoryViewModel ProductCategory { set; get; }
