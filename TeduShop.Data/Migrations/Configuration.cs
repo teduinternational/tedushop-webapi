@@ -74,7 +74,7 @@
                     EmailConfirmed = true,
                     BirthDay = DateTime.Now,
                     FullName = "Bach Ngoc Toan",
-                    Avatar = "/src/assets/images/img.jpg",
+                    Avatar = "/assets/images/img.jpg",
                     Gender = true,
                     Status = true
                 };
