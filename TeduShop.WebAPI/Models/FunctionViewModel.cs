@@ -8,7 +8,7 @@ namespace TeduShop.Web.Models
 {
     public class FunctionViewModel
     {
-        public int ID { set; get; }
+        public string ID { set; get; }
 
         [Required]
         [MaxLength(50)]
@@ -20,7 +20,7 @@ namespace TeduShop.Web.Models
 
         public int DisplayOrder { set; get; }
 
-        public int? ParentId { set; get; }
+        public string ParentId { set; get; }
 
         public FunctionViewModel Parent { set; get; }
 
