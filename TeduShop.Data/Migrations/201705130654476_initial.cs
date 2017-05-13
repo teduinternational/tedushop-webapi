@@ -3,7 +3,7 @@ namespace TeduShop.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -97,11 +97,11 @@ namespace TeduShop.Data.Migrations
                 "dbo.Functions",
                 c => new
                     {
-                        ID = c.Int(nullable: false, identity: true),
+                        ID = c.String(nullable: false, maxLength: 50, unicode: false),
                         Name = c.String(nullable: false, maxLength: 50),
                         URL = c.String(nullable: false, maxLength: 256),
                         DisplayOrder = c.Int(nullable: false),
-                        ParentId = c.Int(),
+                        ParentId = c.String(maxLength: 50, unicode: false),
                         Status = c.Boolean(nullable: false),
                         IconCss = c.String(),
                     })
@@ -276,7 +276,7 @@ namespace TeduShop.Data.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         RoleId = c.String(maxLength: 128),
-                        FunctionId = c.Int(nullable: false),
+                        FunctionId = c.String(maxLength: 50, unicode: false),
                         CanCreate = c.Boolean(nullable: false),
                         CanRead = c.Boolean(nullable: false),
                         CanUpdate = c.Boolean(nullable: false),
@@ -284,7 +284,7 @@ namespace TeduShop.Data.Migrations
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.AppRoles", t => t.RoleId)
-                .ForeignKey("dbo.Functions", t => t.FunctionId, cascadeDelete: true)
+                .ForeignKey("dbo.Functions", t => t.FunctionId)
                 .Index(t => t.RoleId)
                 .Index(t => t.FunctionId);
             

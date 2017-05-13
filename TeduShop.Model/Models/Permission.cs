@@ -12,7 +12,9 @@ namespace TeduShop.Model.Models
         [StringLength(128)]
         public string RoleId { get; set; }
 
-        public int FunctionId { get; set; }
+        [StringLength(50)]
+        [Column(TypeName ="varchar")]
+        public string FunctionId { get; set; }
 
         public bool CanCreate { set; get; } 
 

@@ -7,8 +7,9 @@ namespace TeduShop.Model.Models
     public class Function
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { set; get; }
+        [StringLength(50)]
+        [Column(TypeName = "varchar")]
+        public string ID { set; get; }
 
         [Required]
         [MaxLength(50)]
@@ -20,7 +21,9 @@ namespace TeduShop.Model.Models
 
         public int DisplayOrder { set; get; }
 
-        public int? ParentId { set; get; }
+        [StringLength(50)]
+        [Column(TypeName = "varchar")]
+        public string ParentId { set; get; }
 
         [ForeignKey("ParentId")]
         public virtual Function Parent { set; get; }
