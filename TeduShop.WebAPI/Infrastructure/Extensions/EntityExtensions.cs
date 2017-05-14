@@ -103,7 +103,17 @@ namespace TeduShop.Web.Infrastructure.Extensions
             feedback.Status = feedbackVm.Status;
             feedback.CreatedDate = DateTime.Now;
         }
-
+        public static void UpdateFunction(this Function function, FunctionViewModel functionVm)
+        {
+            function.Name = functionVm.Name;
+            function.DisplayOrder = functionVm.DisplayOrder;
+            function.IconCss = functionVm.IconCss;
+            function.Status = functionVm.Status;
+            function.ParentId = functionVm.ParentId;
+            function.Status = functionVm.Status;
+            function.URL = functionVm.URL;
+            function.ID = functionVm.ID;
+        }
         public static void UpdateOrder(this Order order, OrderViewModel orderVm)
         {
             order.CustomerName = orderVm.CustomerName;
