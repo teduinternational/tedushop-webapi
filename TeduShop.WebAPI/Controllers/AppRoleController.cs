@@ -80,10 +80,10 @@ namespace TeduShop.Web.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                ICollection<PermissionViewModel> permissions = new List<PermissionViewModel>();
+                List<PermissionViewModel> permissions = new List<PermissionViewModel>();
                 HttpResponseMessage response = null;
                 var roles = AppRoleManager.Roles.ToList();
-                var listPermission = _permissionService.GetByFunctionId(functionId);
+                var listPermission = _permissionService.GetByFunctionId(functionId).ToList();
                 if (listPermission.Count == 0)
                 {
                     foreach (var item in roles)
@@ -108,7 +108,7 @@ namespace TeduShop.Web.Controllers
                 {
                     foreach (var item in roles)
                     {
-                        if (!permissions.Any(x => x.RoleId == item.Id))
+                        if (!listPermission.Any(x => x.RoleId == item.Id))
                         {
                             permissions.Add(new PermissionViewModel()
                             {
@@ -125,6 +125,7 @@ namespace TeduShop.Web.Controllers
                                 }
                             });
                         }
+                        permissions = Mapper.Map<List<Permission>, List<PermissionViewModel>>(listPermission);
                     }
                 }
                 response = request.CreateResponse(HttpStatusCode.OK, permissions);
