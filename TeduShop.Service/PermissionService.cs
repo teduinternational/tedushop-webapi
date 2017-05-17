@@ -41,8 +41,7 @@ namespace TeduShop.Service
         public ICollection<Permission> GetByFunctionId(string functionId)
         {
             return _permissionRepository
-                .GetMulti(x => x.FunctionId == functionId, new string[] { "AppRole", "AppRole" })
-                .Where(x => x.AppRole.Name != "Admin").ToList();
+                .GetMulti(x => x.FunctionId == functionId, new string[] { "AppRole", "AppRole" }).ToList();
         }
 
         public void SaveChange()

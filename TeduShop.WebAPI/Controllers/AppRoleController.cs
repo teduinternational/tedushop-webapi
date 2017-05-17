@@ -82,7 +82,7 @@ namespace TeduShop.Web.Controllers
             {
                 List<PermissionViewModel> permissions = new List<PermissionViewModel>();
                 HttpResponseMessage response = null;
-                var roles = AppRoleManager.Roles.ToList();
+                var roles = AppRoleManager.Roles.Where(x => x.Name != "Admin").ToList();
                 var listPermission = _permissionService.GetByFunctionId(functionId).ToList();
                 if (listPermission.Count == 0)
                 {
