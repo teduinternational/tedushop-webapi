@@ -114,6 +114,15 @@ namespace TeduShop.Web.Infrastructure.Extensions
             function.URL = functionVm.URL;
             function.ID = functionVm.ID;
         }
+        public static void UpdatePermission(this Permission permission, PermissionViewModel permissionVm)
+        {
+            permission.RoleId = permissionVm.RoleId;
+            permission.FunctionId = permissionVm.FunctionId;
+            permission.CanCreate = permissionVm.CanCreate;
+            permission.CanDelete = permissionVm.CanDelete;
+            permission.CanRead = permissionVm.CanRead;
+            permission.CanUpdate = permissionVm.CanUpdate;
+        }
         public static void UpdateOrder(this Order order, OrderViewModel orderVm)
         {
             order.CustomerName = orderVm.CustomerName;

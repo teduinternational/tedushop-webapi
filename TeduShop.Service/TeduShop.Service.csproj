@@ -64,6 +64,7 @@
     <Compile Include="FunctionService.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="PageService.cs" />
+    <Compile Include="PermissionService.cs" />
     <Compile Include="PostCategoryService.cs" />
     <Compile Include="PostService.cs" />
     <Compile Include="ProductCategoryService.cs" />

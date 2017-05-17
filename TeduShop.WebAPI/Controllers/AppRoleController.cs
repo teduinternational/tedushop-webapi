@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,10 +21,12 @@ namespace TeduShop.Web.Controllers
     [Authorize]
     public class AppRoleController : ApiControllerBase
     {
-        public AppRoleController(IErrorService errorService) : base(errorService)
+        private IPermissionService _permissionService;
+        public AppRoleController(IErrorService errorService, IPermissionService permissionService) : base(errorService)
         {
+            _permissionService = permissionService;
         }
-       
+
         [Route("getlistpaging")]
         [HttpGet]
         public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
@@ -69,6 +72,95 @@ namespace TeduShop.Web.Controllers
 
                 return response;
             });
+        }
+        [Route("getAllPermission")]
+        [HttpGet]
+        public HttpResponseMessage GetAllPermission(HttpRequestMessage request, string functionId)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                ICollection<PermissionViewModel> permissions = new List<PermissionViewModel>();
+                HttpResponseMessage response = null;
+                var roles = AppRoleManager.Roles.ToList();
+                var listPermission = _permissionService.GetByFunctionId(functionId);
+                if (listPermission.Count == 0)
+                {
+                    foreach (var item in roles)
+                    {
+                        permissions.Add(new PermissionViewModel()
+                        {
+                            RoleId = item.Id,
+                            CanCreate = false,
+                            CanDelete = false,
+                            CanRead = false,
+                            CanUpdate = false,
+                            AppRole = new ApplicationRoleViewModel()
+                            {
+                                Id = item.Id,
+                                Description = item.Description,
+                                Name = item.Name
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    foreach (var item in roles)
+                    {
+                        if (!permissions.Any(x => x.RoleId == item.Id))
+                        {
+                            permissions.Add(new PermissionViewModel()
+                            {
+                                RoleId = item.Id,
+                                CanCreate = false,
+                                CanDelete = false,
+                                CanRead = false,
+                                CanUpdate = false,
+                                AppRole = new ApplicationRoleViewModel()
+                                {
+                                    Id = item.Id,
+                                    Description = item.Description,
+                                    Name = item.Name
+                                }
+                            });
+                        }
+                    }
+                }
+                response = request.CreateResponse(HttpStatusCode.OK, permissions);
+
+                return response;
+            });
+        }
+
+        [HttpPost]
+        [Route("savePermission")]
+        public HttpResponseMessage SavePermission(HttpRequestMessage request, List<PermissionViewModel> permissions, string functionId)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var permission = new Permission();
+                _permissionService.DeleteAll(functionId);
+                foreach (var item in permissions)
+                {
+                    permission.UpdatePermission(item);
+                    permission.FunctionId = functionId;
+                    _permissionService.Add(permission);
+                }
+                try
+                {
+                    _permissionService.SaveChange();
+                    return request.CreateResponse(HttpStatusCode.OK, "Lưu quyền thành cống");
+                }
+                catch (Exception ex)
+                {
+                    return request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                }
+            }
+            else
+            {
+                return request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
         }
 
         [Route("detail/{id}")]
