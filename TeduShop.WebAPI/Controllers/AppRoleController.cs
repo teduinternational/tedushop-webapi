@@ -14,6 +14,7 @@ using TeduShop.Web.App_Start;
 using TeduShop.Web.Infrastructure.Core;
 using TeduShop.Web.Infrastructure.Extensions;
 using TeduShop.Web.Models;
+using TeduShop.Web.Models.DataContracts;
 
 namespace TeduShop.Web.Controllers
 {
@@ -134,17 +135,17 @@ namespace TeduShop.Web.Controllers
 
         [HttpPost]
         [Route("savePermission")]
-        public HttpResponseMessage SavePermission(HttpRequestMessage request, List<PermissionViewModel> permissions, string functionId)
+        public HttpResponseMessage SavePermission(HttpRequestMessage request, SavePermissionRequest data)
         {
             if (ModelState.IsValid)
             {
 
-                var permission = new Permission();
-                _permissionService.DeleteAll(functionId);
-                foreach (var item in permissions)
+                _permissionService.DeleteAll(data.FunctionId);
+                foreach (var item in data.Permissions)
                 {
+                    var permission = new Permission();
                     permission.UpdatePermission(item);
-                    permission.FunctionId = functionId;
+                    permission.FunctionId = data.FunctionId;
                     _permissionService.Add(permission);
                 }
                 try

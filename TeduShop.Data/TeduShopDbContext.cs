@@ -36,6 +36,7 @@ namespace TeduShop.Data
         public DbSet<Function> Functions { set; get; }
         public DbSet<Permission> Permissions { set; get; }
         public DbSet<AppRole> AppRoles { set; get; }
+        public DbSet<IdentityUserRole> UserRoles { set; get; }
 
 
         public DbSet<Color> Colors { set; get; }

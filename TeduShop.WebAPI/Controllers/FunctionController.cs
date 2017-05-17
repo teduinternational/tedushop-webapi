@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,15 @@ namespace TeduShop.Web.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response = null;
-                var model = _functionService.GetAll(string.Empty);
+                IEnumerable<Function> model;
+                if (User.IsInRole("Admin"))
+                {
+                    model = _functionService.GetAll(string.Empty);
+                }
+                else
+                {
+                    model = _functionService.GetAllWithPermission(User.Identity.GetUserId());
+                }
 
                 IEnumerable<FunctionViewModel> modelVm = Mapper.Map<IEnumerable<Function>, IEnumerable<FunctionViewModel>>(model);
                 var parents = modelVm.Where(x => x.Parent == null);
@@ -48,7 +57,7 @@ namespace TeduShop.Web.Controllers
 
         [Route("getall")]
         [HttpGet]
-        public HttpResponseMessage GetAll(HttpRequestMessage request,string filter = "")
+        public HttpResponseMessage GetAll(HttpRequestMessage request, string filter = "")
         {
             return CreateHttpResponse(request, () =>
             {

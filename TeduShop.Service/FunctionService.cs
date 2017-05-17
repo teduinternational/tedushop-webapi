@@ -13,6 +13,8 @@ namespace TeduShop.Service
 
         IEnumerable<Function> GetAll(string filter);
 
+        IEnumerable<Function> GetAllWithPermission(string userId);
+
         Function Get(string id);
 
         void Update(Function function);
@@ -61,6 +63,11 @@ namespace TeduShop.Service
             var query = _functionRepository.GetMulti(x => x.Status);
             if (!string.IsNullOrEmpty(filter))
                 query = query.Where(x => x.Name.Contains(filter));
+            return query.OrderBy(x => x.ParentId);
+        }
+        public IEnumerable<Function> GetAllWithPermission(string userId)
+        {
+            var query = _functionRepository.GetListFunctionWithPermission(userId);
             return query.OrderBy(x => x.ParentId);
         }
 
