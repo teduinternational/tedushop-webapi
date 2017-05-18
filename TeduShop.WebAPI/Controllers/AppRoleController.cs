@@ -23,8 +23,10 @@ namespace TeduShop.Web.Controllers
     public class AppRoleController : ApiControllerBase
     {
         private IPermissionService _permissionService;
-        public AppRoleController(IErrorService errorService, IPermissionService permissionService) : base(errorService)
+        private IFunctionService _functionService;
+        public AppRoleController(IErrorService errorService, IFunctionService functionService, IPermissionService permissionService) : base(errorService)
         {
+            _functionService = functionService;
             _permissionService = permissionService;
         }
 
@@ -142,12 +144,35 @@ namespace TeduShop.Web.Controllers
             {
 
                 _permissionService.DeleteAll(data.FunctionId);
+                Permission permission = null;
                 foreach (var item in data.Permissions)
                 {
-                    var permission = new Permission();
+                    permission = new Permission();
                     permission.UpdatePermission(item);
                     permission.FunctionId = data.FunctionId;
                     _permissionService.Add(permission);
+
+
+                }
+                var functions = _functionService.GetAllWithParentID(data.FunctionId);
+                if (functions.Any())
+                {
+                    foreach (var item in functions)
+                    {
+                        _permissionService.DeleteAll(item.ID);
+
+                        foreach (var p in data.Permissions)
+                        {
+                            var childPermission = new Permission();
+                            childPermission.FunctionId = item.ID;
+                            childPermission.RoleId = p.RoleId;
+                            childPermission.CanRead = p.CanRead;
+                            childPermission.CanCreate = p.CanCreate;
+                            childPermission.CanDelete = p.CanDelete;
+                            childPermission.CanUpdate = p.CanUpdate;
+                            _permissionService.Add(childPermission);
+                        }
+                    }
                 }
                 try
                 {

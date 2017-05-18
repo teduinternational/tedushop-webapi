@@ -12,6 +12,7 @@ namespace TeduShop.Service
     public interface IPermissionService
     {
         ICollection<Permission> GetByFunctionId(string functionId);
+        ICollection<Permission> GetByUserId(string userId);
         void Add(Permission permission);
         void DeleteAll(string functionId);
         void SaveChange();
@@ -42,6 +43,11 @@ namespace TeduShop.Service
         {
             return _permissionRepository
                 .GetMulti(x => x.FunctionId == functionId, new string[] { "AppRole", "AppRole" }).ToList();
+        }
+
+        public ICollection<Permission> GetByUserId(string userId)
+        {
+            return _permissionRepository.GetByUserId(userId);
         }
 
         public void SaveChange()
