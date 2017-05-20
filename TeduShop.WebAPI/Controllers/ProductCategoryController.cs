@@ -31,9 +31,9 @@ namespace TeduShop.Web.Controllers
 
         #endregion Initialize
 
-        [Route("getallparents")]
+        [Route("getall")]
         [HttpGet]
-        public HttpResponseMessage GetAll(HttpRequestMessage request)
+        public HttpResponseMessage GetAll(HttpRequestMessage request,string filter)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -46,7 +46,7 @@ namespace TeduShop.Web.Controllers
             });
         }
 
-        [Route("getbyid/{id:int}")]
+        [Route("detail/{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetById(HttpRequestMessage request, int id)
         {
@@ -118,7 +118,6 @@ namespace TeduShop.Web.Controllers
 
         [Route("update")]
         [HttpPut]
-        [AllowAnonymous]
         public HttpResponseMessage Update(HttpRequestMessage request, ProductCategoryViewModel productCategoryVm)
         {
             return CreateHttpResponse(request, () =>

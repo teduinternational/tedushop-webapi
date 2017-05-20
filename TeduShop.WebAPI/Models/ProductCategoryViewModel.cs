@@ -22,6 +22,7 @@ namespace TeduShop.Web.Models
         public string Image { set; get; }
 
         public bool? HomeFlag { set; get; }
+        public int HomeOrder { get; set; }
 
         public virtual IEnumerable<PostViewModel> Posts { set; get; }
 
