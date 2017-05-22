@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="CommonConstants.cs" />
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Enums\ActionEnum.cs" />
+    <Compile Include="Enums\RoleEnum.cs" />
     <Compile Include="Exceptions\NameDuplicatedException.cs" />
     <Compile Include="MailHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

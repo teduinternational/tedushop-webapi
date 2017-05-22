@@ -33,7 +33,7 @@ namespace TeduShop.Web.Controllers
 
         [Route("getall")]
         [HttpGet]
-        public HttpResponseMessage GetAll(HttpRequestMessage request,string filter)
+        public HttpResponseMessage GetAll(HttpRequestMessage request, string filter)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -138,33 +138,40 @@ namespace TeduShop.Web.Controllers
                 }
                 else
                 {
-                    var dbProductCategory = _productCategoryService.GetById(productCategoryVm.ID);
-
-                    dbProductCategory.UpdateProductCategory(productCategoryVm);
-                    dbProductCategory.UpdatedDate = DateTime.Now;
-
-                    _productCategoryService.Update(dbProductCategory);
-                    try
+                    if (productCategoryVm.ID == productCategoryVm.ParentID)
                     {
-                        _productCategoryService.Save();
+                        response = request.CreateResponse(HttpStatusCode.BadRequest, "Danh mục này không thể làm con chính nó.k");
                     }
-                    catch (DbEntityValidationException e)
+                    else
                     {
-                        foreach (var eve in e.EntityValidationErrors)
+                        var dbProductCategory = _productCategoryService.GetById(productCategoryVm.ID);
+
+                        dbProductCategory.UpdateProductCategory(productCategoryVm);
+                        dbProductCategory.UpdatedDate = DateTime.Now;
+
+                        _productCategoryService.Update(dbProductCategory);
+                        try
                         {
-                            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                                eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                            foreach (var ve in eve.ValidationErrors)
-                            {
-                                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                    ve.PropertyName, ve.ErrorMessage);
-                            }
+                            _productCategoryService.Save();
                         }
-                        throw;
+                        catch (DbEntityValidationException e)
+                        {
+                            foreach (var eve in e.EntityValidationErrors)
+                            {
+                                Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                                    eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                                foreach (var ve in eve.ValidationErrors)
+                                {
+                                    Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                        ve.PropertyName, ve.ErrorMessage);
+                                }
+                            }
+                            throw;
+                        }
+                        var responseData = Mapper.Map<ProductCategory, ProductCategoryViewModel>(dbProductCategory);
+                        response = request.CreateResponse(HttpStatusCode.Created, responseData);
                     }
 
-                    var responseData = Mapper.Map<ProductCategory, ProductCategoryViewModel>(dbProductCategory);
-                    response = request.CreateResponse(HttpStatusCode.Created, responseData);
                 }
 
                 return response;
@@ -259,7 +266,7 @@ namespace TeduShop.Web.Controllers
                 items.Add(new ProductCategoryViewModel
                 {
                     ID = cat.ID,
-                    Name = "--" + cat.Name,
+                    Name = parent.Name + " >> " + cat.Name,
                     DisplayOrder = cat.DisplayOrder,
                     Status = cat.Status,
                     CreatedDate = cat.CreatedDate

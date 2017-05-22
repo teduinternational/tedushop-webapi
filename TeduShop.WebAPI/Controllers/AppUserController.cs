@@ -13,6 +13,7 @@ using TeduShop.Web.App_Start;
 using TeduShop.Web.Infrastructure.Core;
 using TeduShop.Web.Infrastructure.Extensions;
 using TeduShop.Web.Models;
+using TeduShop.Web.Providers;
 
 namespace TeduShop.Web.Controllers
 {
@@ -28,6 +29,7 @@ namespace TeduShop.Web.Controllers
 
         [Route("getlistpaging")]
         [HttpGet]
+        [Permission(Action = "Create", Function = "USER")]
         public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
         {
             return CreateHttpResponse(request, () =>
