@@ -15,7 +15,7 @@ using TeduShop.Web.Models;
 
 namespace TeduShop.Web.Controllers
 {
-    [RoutePrefix("api/productcategory")]
+    [RoutePrefix("api/productCategory")]
     [Authorize]
     public class ProductCategoryController : ApiControllerBase
     {
@@ -45,7 +45,16 @@ namespace TeduShop.Web.Controllers
                 return response;
             });
         }
-
+        [Route("getallhierachy")]
+        [HttpGet]
+        public HttpResponseMessage GetAllHierachy(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var response = request.CreateResponse(HttpStatusCode.OK, GetCategoryViewModel());
+                return response;
+            });
+        }
         [Route("detail/{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetById(HttpRequestMessage request, int id)
@@ -88,7 +97,7 @@ namespace TeduShop.Web.Controllers
             });
         }
 
-        [Route("create")]
+        [Route("add")]
         [HttpPost]
         [AllowAnonymous]
         public HttpResponseMessage Create(HttpRequestMessage request, ProductCategoryViewModel productCategoryVm)
@@ -214,6 +223,50 @@ namespace TeduShop.Web.Controllers
 
                 return response;
             });
+        }
+
+        private List<ProductCategoryViewModel> GetCategoryViewModel(long? selectedParent = null)
+        {
+            List<ProductCategoryViewModel> items = new List<ProductCategoryViewModel>();
+
+            //get all of them from DB
+            var allCategorys = _productCategoryService.GetAll();
+            //get parent categories
+            IEnumerable<ProductCategory> parentCategorys = allCategorys.Where(c => c.ParentID == null);
+
+            foreach (var cat in parentCategorys)
+            {
+                //add the parent category to the item list
+                items.Add(new ProductCategoryViewModel
+                {
+                    ID = cat.ID,
+                    Name = cat.Name,
+                    DisplayOrder = cat.DisplayOrder,
+                    Status = cat.Status,
+                    CreatedDate = cat.CreatedDate
+                });
+                //now get all its children (separate Category in case you need recursion)
+                GetSubTree(allCategorys.ToList(), cat, items);
+            }
+            return items;
+        }
+        private void GetSubTree(IList<ProductCategory> allCats, ProductCategory parent, IList<ProductCategoryViewModel> items)
+        {
+            var subCats = allCats.Where(c => c.ParentID == parent.ID);
+            foreach (var cat in subCats)
+            {
+                //add this category
+                items.Add(new ProductCategoryViewModel
+                {
+                    ID = cat.ID,
+                    Name = "--" + cat.Name,
+                    DisplayOrder = cat.DisplayOrder,
+                    Status = cat.Status,
+                    CreatedDate = cat.CreatedDate
+                });
+                //recursive call in case your have a hierarchy more than 1 level deep
+                GetSubTree(allCats, cat, items);
+            }
         }
     }
 }

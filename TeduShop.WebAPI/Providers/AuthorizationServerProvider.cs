@@ -44,7 +44,7 @@ namespace TeduShop.Web.Providers
             {
                 var permissions = ServiceFactory.Get<IPermissionService>().GetByUserId(user.Id);
                 var permissionViewModels = AutoMapper.Mapper.Map<ICollection<Permission>, ICollection<PermissionViewModel>>(permissions);
-
+                var roles = userManager.GetRoles(user.Id);
                 ClaimsIdentity identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer);
                 string avatar = string.IsNullOrEmpty(user.Avatar) ? "" : user.Avatar;
                 string email = string.IsNullOrEmpty(user.Email) ? "" : user.Email;
@@ -52,6 +52,7 @@ namespace TeduShop.Web.Providers
                 identity.AddClaim(new Claim("avatar", avatar));
                 identity.AddClaim(new Claim("email", email));
                 identity.AddClaim(new Claim("username", user.UserName));
+                identity.AddClaim(new Claim("roles", JsonConvert.SerializeObject(roles)));
                 identity.AddClaim(new Claim("permissions", JsonConvert.SerializeObject(permissionViewModels)));
                 var props = new AuthenticationProperties(new Dictionary<string, string>
                     {
@@ -59,7 +60,9 @@ namespace TeduShop.Web.Providers
                         {"avatar", avatar },
                         {"email", email},
                         {"username", user.UserName},
-                        {"permissions",JsonConvert.SerializeObject(permissionViewModels) }
+                        {"permissions",JsonConvert.SerializeObject(permissionViewModels) },
+                        {"roles",JsonConvert.SerializeObject(roles) }
+
                     });
                 context.Validated(new AuthenticationTicket(identity, props));
             }
