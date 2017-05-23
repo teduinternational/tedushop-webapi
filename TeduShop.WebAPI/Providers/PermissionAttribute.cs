@@ -32,22 +32,22 @@ namespace TeduShop.Web.Providers
                     if (!roles.Contains(RoleEnum.Admin.ToString()))
                     {
                         var permissions = JsonConvert.DeserializeObject<List<PermissionViewModel>>(principal.FindFirst("permissions").Value);
-                        if (!permissions.Exists(x => x.FunctionId == Function && x.CanCreate && Action == ActionEnum.Create.ToString()))
+                        if (!permissions.Exists(x => x.FunctionId == Function && x.CanCreate) && Action == ActionEnum.Create.ToString())
                         {
                             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
 
                         }
-                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanRead && Action == ActionEnum.Read.ToString()))
+                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanRead) && Action == ActionEnum.Read.ToString())
                         {
                             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
 
                         }
-                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanDelete && Action == ActionEnum.Delete.ToString()))
+                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanDelete) && Action == ActionEnum.Delete.ToString())
                         {
                             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
 
                         }
-                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanUpdate && Action == ActionEnum.Update.ToString()))
+                        else if (!permissions.Exists(x => x.FunctionId == Function && x.CanUpdate) && Action == ActionEnum.Update.ToString())
                         {
                             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
                         }
