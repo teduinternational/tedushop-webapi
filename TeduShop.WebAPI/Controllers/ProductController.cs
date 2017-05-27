@@ -50,8 +50,22 @@ namespace TeduShop.Web.Controllers
             };
             return CreateHttpResponse(request, func);
         }
+        [Route("gettags")]
+        [HttpGet]
+        public HttpResponseMessage GetTags(HttpRequestMessage request, string text)
+        {
+            Func<HttpResponseMessage> func = () =>
+            {
+                var model = _productService.GetListProductTag(text);
 
-        [Route("getbyid/{id:int}")]
+                var responseData = Mapper.Map<IEnumerable<Tag>, IEnumerable<TagViewModel>>(model);
+
+                var response = request.CreateResponse(HttpStatusCode.OK, responseData);
+                return response;
+            };
+            return CreateHttpResponse(request, func);
+        }
+        [Route("detail/{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetById(HttpRequestMessage request, int id)
         {
@@ -69,17 +83,17 @@ namespace TeduShop.Web.Controllers
 
         [Route("getall")]
         [HttpGet]
-        public HttpResponseMessage GetAll(HttpRequestMessage request, string keyword, int page, int pageSize = 20)
+        public HttpResponseMessage GetAll(HttpRequestMessage request, int? categoryId, string keyword, int page, int pageSize = 20)
         {
             return CreateHttpResponse(request, () =>
             {
                 int totalRow = 0;
-                var model = _productService.GetAll(keyword);
+                var model = _productService.GetAll(categoryId, keyword);
 
                 totalRow = model.Count();
-                var query = model.OrderByDescending(x => x.CreatedDate).Skip(page * pageSize).Take(pageSize);
+                var query = model.OrderByDescending(x => x.CreatedDate).Skip(page - 1 * pageSize).Take(pageSize).ToList();
 
-                var responseData = Mapper.Map<IEnumerable<Product>, IEnumerable<ProductViewModel>>(query.AsEnumerable());
+                var responseData = Mapper.Map<List<Product>, List<ProductViewModel>>(query);
 
                 var paginationSet = new PaginationSet<ProductViewModel>()
                 {
@@ -93,7 +107,7 @@ namespace TeduShop.Web.Controllers
             });
         }
 
-        [Route("create")]
+        [Route("add")]
         [HttpPost]
         public HttpResponseMessage Create(HttpRequestMessage request, ProductViewModel productCategoryVm)
         {
