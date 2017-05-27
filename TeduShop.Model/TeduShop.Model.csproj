@@ -76,9 +76,8 @@
     <Compile Include="Models\PostTag.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductCategory.cs" />
-    <Compile Include="Models\ProductColor.cs" />
     <Compile Include="Models\ProductImage.cs" />
-    <Compile Include="Models\ProductSize.cs" />
+    <Compile Include="Models\ProductQuantity.cs" />
     <Compile Include="Models\ProductTag.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\Slide.cs" />

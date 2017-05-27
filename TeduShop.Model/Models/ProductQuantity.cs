@@ -8,21 +8,28 @@ using System.Threading.Tasks;
 
 namespace TeduShop.Model.Models
 {
-    [Table("ProductColors")]
-    public class ProductColor
+    [Table("ProductQuantities")]
+    public class ProductQuantity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
-
+        [Column(Order = 1)]
         public int ProductId { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public int SizeId { get; set; }
 
+        [Key]
+        [Column(Order = 3)]
         public int ColorId { get; set; }
 
         public int Quantity { get; set; }
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
+
+        [ForeignKey("SizeId")]
+        public virtual Size Size { get; set; }
+
         [ForeignKey("ColorId")]
         public virtual Color Color { get; set; }
     }
