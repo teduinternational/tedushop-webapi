@@ -111,7 +111,7 @@ namespace TeduShop.Service
         {
             var query = _productRepository.GetAll(new string[] { "ProductCategory", "ProductTags" });
             if (!string.IsNullOrEmpty(keyword))
-                query = query.Where(x => keyword.Contains(x.Name));
+                query = query.Where(x => x.Name.Contains(keyword));
 
             if (categoryId.HasValue)
                 query = query.Where(x => x.CategoryID == categoryId.Value);
