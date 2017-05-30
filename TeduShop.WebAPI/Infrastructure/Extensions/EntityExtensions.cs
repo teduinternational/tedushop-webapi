@@ -104,6 +104,20 @@ namespace TeduShop.Web.Infrastructure.Extensions
             feedback.Status = feedbackVm.Status;
             feedback.CreatedDate = DateTime.Now;
         }
+
+        public static void UpdateProductQuantity(this ProductQuantity quantity, ProductQuantityViewModel quantityVm)
+        {
+            quantity.ColorId = quantityVm.ColorId;
+            quantity.ProductId = quantityVm.ProductId;
+            quantity.SizeId = quantityVm.SizeId;
+        }
+
+        public static void UpdateProductImage(this ProductImage image, ProductImageViewModel imageVm)
+        {
+            image.ProductId = imageVm.ProductId;
+            image.Path = imageVm.Path;
+            image.Caption = imageVm.Caption;
+        }
         public static void UpdateFunction(this Function function, FunctionViewModel functionVm)
         {
             function.Name = functionVm.Name;

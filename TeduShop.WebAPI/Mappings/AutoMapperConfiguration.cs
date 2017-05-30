@@ -24,6 +24,8 @@ namespace TeduShop.Web.Mappings
                 cfg.CreateMap<AppUser, AppUserViewModel>();
                 cfg.CreateMap<Function, FunctionViewModel>();
                 cfg.CreateMap<Permission, PermissionViewModel>();
+                cfg.CreateMap<ProductImage, ProductImageViewModel>();
+                cfg.CreateMap<ProductQuantity, ProductQuantityViewModel>();
             });
         }
     }
