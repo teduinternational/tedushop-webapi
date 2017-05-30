@@ -75,12 +75,46 @@ namespace TeduShop.Web.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public HttpResponseMessage Delete(HttpRequestMessage request, int id)
+        public HttpResponseMessage Delete(HttpRequestMessage request, int productId, int colorId, int sizeId)
         {
-            _productQuantityService.Delete(id);
+            _productQuantityService.Delete(productId,colorId,sizeId);
             _productQuantityService.Save();
 
-            return request.CreateResponse(HttpStatusCode.OK, id);
+            return request.CreateResponse(HttpStatusCode.OK, "Xóa thành công");
+        }
+
+        [Route("getcolors")]
+        [HttpGet]
+        public HttpResponseMessage GetColors(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                HttpResponseMessage response = null;
+                var model = _productQuantityService.GetListColor();
+
+                IEnumerable<ColorViewModel> modelVm = Mapper.Map<IEnumerable<Color>, IEnumerable<ColorViewModel>>(model);
+
+                response = request.CreateResponse(HttpStatusCode.OK, modelVm);
+
+                return response;
+            });
+        }
+
+        [Route("getsizes")]
+        [HttpGet]
+        public HttpResponseMessage GetSizes(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                HttpResponseMessage response = null;
+                var model = _productQuantityService.GetListSize();
+
+                List<SizeViewModel> modelVm = Mapper.Map<List<Size>, List<SizeViewModel>>(model);
+
+                response = request.CreateResponse(HttpStatusCode.OK, modelVm);
+
+                return response;
+            });
         }
     }
 }

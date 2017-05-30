@@ -110,6 +110,7 @@ namespace TeduShop.Web.Infrastructure.Extensions
             quantity.ColorId = quantityVm.ColorId;
             quantity.ProductId = quantityVm.ProductId;
             quantity.SizeId = quantityVm.SizeId;
+            quantity.Quantity = quantityVm.Quantity;
         }
 
         public static void UpdateProductImage(this ProductImage image, ProductImageViewModel imageVm)
