@@ -24,7 +24,7 @@ namespace TeduShop.Web.Controllers
 
         [Route("getall")]
         [HttpGet]
-        public HttpResponseMessage GetAll(HttpRequestMessage request, int productId, int? sizeId, int? colorId)
+        public HttpResponseMessage GetAll(HttpRequestMessage request, int productId)
         {
             return CreateHttpResponse(request, () =>
             {
