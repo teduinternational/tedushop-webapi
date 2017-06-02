@@ -112,6 +112,20 @@ namespace TeduShop.Web.Infrastructure.Extensions
             quantity.SizeId = quantityVm.SizeId;
             quantity.Quantity = quantityVm.Quantity;
         }
+        public static void UpdateOrder(this Order order, OrderViewModel orderVm)
+        {
+            order.CustomerName = orderVm.CustomerName;
+            order.CustomerAddress = orderVm.CustomerAddress;
+            order.CustomerEmail = orderVm.CustomerEmail;
+            order.CustomerMobile = orderVm.CustomerMobile;
+            order.CustomerMessage = orderVm.CustomerMessage;
+            order.PaymentMethod = orderVm.PaymentMethod;
+            order.CreatedDate = DateTime.Now;
+            order.CreatedBy = orderVm.CreatedBy;
+            order.PaymentStatus = orderVm.PaymentStatus;
+            order.Status = orderVm.Status;
+            order.CustomerId = orderVm.CustomerId;
+        }
 
         public static void UpdateProductImage(this ProductImage image, ProductImageViewModel imageVm)
         {
@@ -138,19 +152,6 @@ namespace TeduShop.Web.Infrastructure.Extensions
             permission.CanDelete = permissionVm.CanDelete;
             permission.CanRead = permissionVm.CanRead;
             permission.CanUpdate = permissionVm.CanUpdate;
-        }
-        public static void UpdateOrder(this Order order, OrderViewModel orderVm)
-        {
-            order.CustomerName = orderVm.CustomerName;
-            order.CustomerAddress = orderVm.CustomerName;
-            order.CustomerEmail = orderVm.CustomerName;
-            order.CustomerMobile = orderVm.CustomerName;
-            order.CustomerMessage = orderVm.CustomerName;
-            order.PaymentMethod = orderVm.CustomerName;
-            order.CreatedDate = DateTime.Now;
-            order.CreatedBy = orderVm.CreatedBy;
-            order.Status = orderVm.Status;
-            order.CustomerId = orderVm.CustomerId;
         }
 
         public static void UpdateApplicationRole(this AppRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")

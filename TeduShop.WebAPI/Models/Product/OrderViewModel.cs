@@ -41,6 +41,6 @@ namespace TeduShop.Web.Models
 
         public string BankCode { set; get; }
 
-        public IEnumerable<OrderDetailViewModel> OrderDetails { set; get; }
+        public ICollection<OrderDetailViewModel> OrderDetails { set; get; }
     }
 }
