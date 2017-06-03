@@ -1,9 +1,15 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.Table;
+using Spire.Pdf;
+using Spire.Xls;
+using Spire.Xls.Converter;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +41,25 @@ namespace TeduShop.Common
                     pck.Save();
                 }
             });
+        }
+
+        public static HttpResponseMessage ReturnStreamAsFile(MemoryStream stream, string filename)
+        {
+            // Set HTTP Status Code
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            // Reset Stream Position
+            stream.Position = 0;
+            result.Content = new StreamContent(stream);
+
+            // Generic Content Header
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+
+            //Set Filename sent to client
+            result.Content.Headers.ContentDisposition.FileName = filename;
+
+            return result;
         }
     }
 }

@@ -1,10 +1,16 @@
 ﻿using AutoMapper;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using TeduShop.Common;
 using TeduShop.Model.Models;
 using TeduShop.Service;
 using TeduShop.Web.Infrastructure.Core;
@@ -161,7 +167,101 @@ namespace TeduShop.Web.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
         }
+        [Route("exportExcel/{id}")]
+        [HttpGet]
+        public HttpResponseMessage ExportOrder(HttpRequestMessage request, int id)
+        {
+            var folderReport = ConfigHelper.GetByKey("ReportFolder");
+            string filePath = HttpContext.Current.Server.MapPath(folderReport);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            string documentName = GenerateOrder(id);
+            if (!string.IsNullOrEmpty(documentName))
+            {
+                return request.CreateErrorResponse(HttpStatusCode.OK, folderReport + "/" +documentName);
+            }
+            else
+            {
+                return request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error export");
 
+            }
 
+            // If something fails or somebody calls invalid URI, throw error.
+        }
+        #region Export to Excel
+        private string GenerateOrder(int orderId)
+        {
+            var folderReport = ConfigHelper.GetByKey("ReportFolder");
+            string filePath = HttpContext.Current.Server.MapPath(folderReport);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            // Template File
+            string templateDocument =
+                    HttpContext.Current.Server.MapPath("~/Templates/OrderTemplate.xlsx");
+            string documentName = string.Format("Order-{0}.xlsx", orderId);
+            string fullPath = Path.Combine(filePath, documentName);
+            // Results Output
+            MemoryStream output = new MemoryStream();
+            try
+            {
+                // Read Template
+                using (FileStream templateDocumentStream = File.OpenRead(templateDocument))
+                {
+                    // Create Excel EPPlus Package based on template stream
+                    using (ExcelPackage package = new ExcelPackage(templateDocumentStream))
+                    {
+                        // Grab the sheet with the template, sheet name is "BOL".
+                        ExcelWorksheet sheet = package.Workbook.Worksheets["TEDUOrder"];
+                        // Data Acces, load order header data.
+                        var order = _orderService.GetDetail(orderId);
+
+                        // Insert customer data into template
+                        sheet.Cells[4, 1].Value = "Tên khách hàng: " + order.CustomerName;
+                        sheet.Cells[5, 1].Value = "Địa chỉ: " + order.CustomerAddress;
+                        sheet.Cells[6, 1].Value = "Điện thoại: " + order.CustomerMobile;
+                        // Start Row for Detail Rows
+                        int rowIndex = 9;
+
+                        // load order details
+                        var orderDetails = _orderService.GetOrderDetails(orderId);
+                        int count = 1;
+                        foreach (var orderDetail in orderDetails)
+                        {
+                            // Cell 1, Carton Count
+                            sheet.Cells[rowIndex, 1].Value = count.ToString();
+                            // Cell 2, Order Number (Outline around columns 2-7 make it look like 1 column)
+                            sheet.Cells[rowIndex, 2].Value = orderDetail.Product.Name;
+                            // Cell 8, Weight in LBS (convert KG to LBS, and rounding to whole number)
+                            sheet.Cells[rowIndex, 3].Value = orderDetail.Quantity.ToString();
+
+                            sheet.Cells[rowIndex, 4].Value = orderDetail.Price.ToString("N0");
+                            sheet.Cells[rowIndex, 5].Value = (orderDetail.Price * orderDetail.Quantity).ToString("N0");
+                            // Increment Row Counter
+                            rowIndex++;
+                            count++;
+                        }
+                        double total = (double)(orderDetails.Sum(x => x.Quantity * x.Price));
+                        sheet.Cells[24, 5].Value = total.ToString("N0");
+
+                        sheet.Cells[26, 1].Value = NumberHelper.NumberToWords(total);
+                        var file = new FileInfo(fullPath);
+                        if (file.Exists)
+                            file.Delete();
+                        package.SaveAs(new FileInfo(fullPath));
+                    }
+                    return documentName;
+                }
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+
+        }
+        #endregion
     }
 }
