@@ -180,7 +180,7 @@ namespace TeduShop.Web.Controllers
             string documentName = GenerateOrder(id);
             if (!string.IsNullOrEmpty(documentName))
             {
-                return request.CreateErrorResponse(HttpStatusCode.OK, folderReport + "/" +documentName);
+                return request.CreateErrorResponse(HttpStatusCode.OK, folderReport + "/" + documentName);
             }
             else
             {
@@ -202,7 +202,7 @@ namespace TeduShop.Web.Controllers
             // Template File
             string templateDocument =
                     HttpContext.Current.Server.MapPath("~/Templates/OrderTemplate.xlsx");
-            string documentName = string.Format("Order-{0}.xlsx", orderId);
+            string documentName = string.Format("Order-{0}-{1}.xlsx", orderId,DateTime.Now.ToString("yyyyMMddhhmmsss"));
             string fullPath = Path.Combine(filePath, documentName);
             // Results Output
             MemoryStream output = new MemoryStream();
@@ -247,10 +247,14 @@ namespace TeduShop.Web.Controllers
                         double total = (double)(orderDetails.Sum(x => x.Quantity * x.Price));
                         sheet.Cells[24, 5].Value = total.ToString("N0");
 
-                        sheet.Cells[26, 1].Value = NumberHelper.NumberToWords(total);
-                        var file = new FileInfo(fullPath);
-                        if (file.Exists)
-                            file.Delete();
+                        var numberWord = "Thành tiền (viết bằng chữ): " + NumberHelper.ToString(total);
+                        sheet.Cells[26, 1].Value = numberWord;
+                        if (order.CreatedDate.HasValue)
+                        {
+                            var date = order.CreatedDate.Value;
+                            sheet.Cells[28, 3].Value = "Ngày " + date.Day + " tháng " + date.Month + 1 + " năm " + date.Year;
+
+                        }
                         package.SaveAs(new FileInfo(fullPath));
                     }
                     return documentName;
