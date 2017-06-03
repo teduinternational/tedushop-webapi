@@ -75,7 +75,7 @@ namespace TeduShop.Web.Controllers
             }
         }
 
-        [Route("getalldetails")]
+        [Route("getalldetails/{id}")]
         [HttpGet]
         [Permission(Action = "Read", Function = "ORDER")]
         //[Authorize(Roles = "ViewUser")]

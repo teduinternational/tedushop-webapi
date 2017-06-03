@@ -94,7 +94,7 @@ namespace TeduShop.Service
 
         public List<OrderDetail> GetOrderDetails(int orderId)
         {
-            return _orderDetailRepository.GetMulti(x => x.OrderID == orderId, new string[] { "Order" }).ToList();
+            return _orderDetailRepository.GetMulti(x => x.OrderID == orderId, new string[] { "Order","Color","Size", "Product" }).ToList();
         }
 
         public OrderDetail CreateDetail(OrderDetail order)
