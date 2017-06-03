@@ -252,7 +252,7 @@ namespace TeduShop.Web.Controllers
                         if (order.CreatedDate.HasValue)
                         {
                             var date = order.CreatedDate.Value;
-                            sheet.Cells[28, 3].Value = "Ngày " + date.Day + " tháng " + date.Month + 1 + " năm " + date.Year;
+                            sheet.Cells[28, 3].Value = "Ngày " + date.Day + " tháng " + date.Month + " năm " + date.Year;
 
                         }
                         package.SaveAs(new FileInfo(fullPath));
