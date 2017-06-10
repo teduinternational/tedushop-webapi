@@ -44,6 +44,9 @@ namespace TeduShop.Data
         public DbSet<ProductQuantity> ProductQuantities { set; get; }
         public DbSet<ProductImage> ProductImages { set; get; }
 
+        public DbSet<Announcement> Announcements { set; get; }
+        public DbSet<AnnouncementUser> AnnouncementUsers { set; get; }
+
         public static TeduShopDbContext Create()
         {
             return new TeduShopDbContext();

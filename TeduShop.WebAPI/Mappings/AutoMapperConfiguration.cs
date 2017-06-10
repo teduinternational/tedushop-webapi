@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TeduShop.Model.Models;
 using TeduShop.Web.Models;
+using TeduShop.Web.Models.Common;
 
 namespace TeduShop.Web.Mappings
 {
@@ -30,6 +31,8 @@ namespace TeduShop.Web.Mappings
                 cfg.CreateMap<Size, SizeViewModel>();
                 cfg.CreateMap<Order, OrderViewModel>();
                 cfg.CreateMap<OrderDetail, OrderDetailViewModel>();
+                cfg.CreateMap<Announcement, AnnouncementViewModel>();
+                cfg.CreateMap<AnnouncementUser, AnnouncementUserViewModel>();
             });
         }
     }

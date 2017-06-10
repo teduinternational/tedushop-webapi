@@ -20,5 +20,9 @@ namespace TeduShop.Common
 
         public const string Administrator = "Administrator";
 
+        //SignalR
+        public const string AdminChannel = "AdminChannel";
+        public const string AnnouncementChannel = "AnnouncementChannel";
+
     }
 }

@@ -76,8 +76,18 @@
     <Compile Include="Migrations\201706011503059_Addcolortodetail.Designer.cs">
       <DependentUpon>201706011503059_Addcolortodetail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706040535559_Announcement.cs" />
+    <Compile Include="Migrations\201706040535559_Announcement.Designer.cs">
+      <DependentUpon>201706040535559_Announcement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706100812533_add-reference-touser.cs" />
+    <Compile Include="Migrations\201706100812533_add-reference-touser.Designer.cs">
+      <DependentUpon>201706100812533_add-reference-touser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AnnouncementRepository.cs" />
+    <Compile Include="Repositories\AnnouncementUserRepository.cs" />
     <Compile Include="Repositories\ColorRepository.cs" />
     <Compile Include="Repositories\ContactDetailRepository.cs" />
     <Compile Include="Repositories\ErrorRepository.cs" />
@@ -106,7 +116,9 @@
     <Compile Include="TeduShopDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +140,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706011503059_Addcolortodetail.resx">
       <DependentUpon>201706011503059_Addcolortodetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706040535559_Announcement.resx">
+      <DependentUpon>201706040535559_Announcement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706100812533_add-reference-touser.resx">
+      <DependentUpon>201706100812533_add-reference-touser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

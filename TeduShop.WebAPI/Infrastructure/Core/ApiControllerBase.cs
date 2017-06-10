@@ -15,20 +15,19 @@ namespace TeduShop.Web.Infrastructure.Core
     public class ApiControllerBase : ApiController
     {
         private IErrorService _errorService;
-        private ApplicationUserManager _userManager;
-        private ApplicationRoleManager _roleManager;
 
         public ApiControllerBase(IErrorService errorService)
         {
-            this._errorService = errorService;
+            _errorService = errorService;
         }
+
         //Code removed from brevity
 
         protected ApplicationRoleManager AppRoleManager
         {
             get
             {
-                return _roleManager ?? Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+                return Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
             }
         }
 
@@ -36,9 +35,10 @@ namespace TeduShop.Web.Infrastructure.Core
         {
             get
             {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
         }
+
         protected HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> function)
         {
             HttpResponseMessage response = null;
