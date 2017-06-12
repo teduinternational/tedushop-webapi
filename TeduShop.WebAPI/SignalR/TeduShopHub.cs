@@ -66,7 +66,7 @@ namespace TeduShop.Web.SignalR
         /// <returns></returns>
         public override Task OnConnected()
         {
-            var name = Context.QueryString["UserName"];
+            var name = Context.User.Identity.Name;
             _connections.Add(name, Context.ConnectionId);
 
             return base.OnConnected();
