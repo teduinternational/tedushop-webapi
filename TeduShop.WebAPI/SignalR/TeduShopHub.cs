@@ -50,7 +50,7 @@ namespace TeduShop.Web.SignalR
                     clients.Client(connectionId).addChatMessage(message);
                 }
             }
-           
+
         }
         private static IHubConnectionContext<dynamic> GetClients(TeduShopHub teduShopHub)
         {
@@ -66,32 +66,27 @@ namespace TeduShop.Web.SignalR
         /// <returns></returns>
         public override Task OnConnected()
         {
-            var name = Context.User.Identity.Name;
-            _connections.Add(name, Context.ConnectionId);
+            _connections.Add(Context.User.Identity.Name, Context.ConnectionId);
 
             return base.OnConnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var name = Context.QueryString["UserName"];
-
-            _connections.Remove(name, Context.ConnectionId);
+            _connections.Remove(Context.User.Identity.Name, Context.ConnectionId);
 
             return base.OnDisconnected(stopCalled);
         }
 
         public override Task OnReconnected()
         {
-            var name = Context.QueryString["UserName"];
-
-            if (!_connections.GetConnections(name).Contains(Context.ConnectionId))
+            if (!_connections.GetConnections(Context.User.Identity.Name).Contains(Context.ConnectionId))
             {
-                _connections.Add(name, Context.ConnectionId);
+                _connections.Add(Context.User.Identity.Name, Context.ConnectionId);
             }
 
             return base.OnReconnected();
         }
-       
+
     }
 }
