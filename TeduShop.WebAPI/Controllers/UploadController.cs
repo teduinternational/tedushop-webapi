@@ -20,7 +20,7 @@ namespace TeduShop.Web.Controllers
 
         [HttpPost]
         [Route("saveImage")]
-        public HttpResponseMessage SaveImage(string type)
+        public HttpResponseMessage SaveImage(string type = "")
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             try
