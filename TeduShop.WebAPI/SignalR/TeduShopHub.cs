@@ -9,6 +9,7 @@ using TeduShop.Web.Models.Common;
 
 namespace TeduShop.Web.SignalR
 {
+    [Authorize]
     public class TeduShopHub : Hub
     {
         private readonly static ConnectionMapping<string> _connections =
