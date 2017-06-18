@@ -20,10 +20,13 @@ namespace TeduShop.Data.Repositories
 
         public IQueryable<Announcement> GetAllUnread(string userId)
         {
-            var query = (from x in DbContext.Announcements.Include("AppUser")
-                         join y in DbContext.AnnouncementUsers.DefaultIfEmpty()
+            var query = (from x in DbContext.Announcements
+                         join y in DbContext.AnnouncementUsers
                          on x.ID equals y.AnnouncementId
-                         where (y.UserId == null || y.UserId == userId)  && (y.HasRead == null || y.HasRead ==false)
+                         into xy
+                         from y in xy.DefaultIfEmpty()
+                         where (y.HasRead == null || y.HasRead==false)
+                         && (y.UserId == null || y.UserId == userId)
                          select x).Include(x => x.AppUser);
             return query;
         }
