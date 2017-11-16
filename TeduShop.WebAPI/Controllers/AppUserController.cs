@@ -35,7 +35,13 @@ namespace TeduShop.Web.Controllers
                 HttpResponseMessage response = null;
                 int totalRow = 0;
                 var model = AppUserManager.Users;
-                IEnumerable<AppUserViewModel> modelVm = Mapper.Map<IEnumerable<AppUser>, IEnumerable<AppUserViewModel>>(model);
+                if (!string.IsNullOrWhiteSpace(filter))
+                    model = model.Where(x => x.UserName.Contains(filter) || x.FullName.Contains(filter));
+
+                totalRow = model.Count();
+
+                var data = model.OrderBy(x => x.FullName).Skip((page - 1) * pageSize).Take(pageSize);
+                IEnumerable<AppUserViewModel> modelVm = Mapper.Map<IEnumerable<AppUser>, IEnumerable<AppUserViewModel>>(data);
 
                 PaginationSet<AppUserViewModel> pagedSet = new PaginationSet<AppUserViewModel>()
                 {
