@@ -2,10 +2,14 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TeduShop.Model.Models;
+using TeduShop.Service;
+using TeduShop.Web.Infrastructure.Core;
+using TeduShop.Web.Models;
 
 namespace TeduShop.Web.Providers
 {
@@ -13,7 +17,6 @@ namespace TeduShop.Web.Providers
     {
         public AuthorizationServerProvider()
         {
-
         }
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
@@ -39,25 +42,33 @@ namespace TeduShop.Web.Providers
             }
             if (user != null)
             {
+                var permissions = ServiceFactory.Get<IPermissionService>().GetByUserId(user.Id);
+                var permissionViewModels = AutoMapper.Mapper.Map<ICollection<Permission>, ICollection<PermissionViewModel>>(permissions);
+                var roles = userManager.GetRoles(user.Id);
                 ClaimsIdentity identity = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer);
                 string avatar = string.IsNullOrEmpty(user.Avatar) ? "" : user.Avatar;
-                string email  = string.IsNullOrEmpty(user.Email) ? "" : user.Email;
+                string email = string.IsNullOrEmpty(user.Email) ? "" : user.Email;
                 identity.AddClaim(new Claim("fullName", user.FullName));
                 identity.AddClaim(new Claim("avatar", avatar));
                 identity.AddClaim(new Claim("email", email));
                 identity.AddClaim(new Claim("username", user.UserName));
+                identity.AddClaim(new Claim("roles", JsonConvert.SerializeObject(roles)));
+                identity.AddClaim(new Claim("permissions", JsonConvert.SerializeObject(permissionViewModels)));
                 var props = new AuthenticationProperties(new Dictionary<string, string>
                     {
                         {"fullName", user.FullName},
                         {"avatar", avatar },
                         {"email", email},
-                        {"username", user.UserName}
+                        {"username", user.UserName},
+                        {"permissions",JsonConvert.SerializeObject(permissionViewModels) },
+                        {"roles",JsonConvert.SerializeObject(roles) }
+
                     });
                 context.Validated(new AuthenticationTicket(identity, props));
             }
             else
             {
-                context.SetError("invalid_grant", "Tài khoản hoặc mật khẩu không đúng.'");
+                context.SetError("invalid_grant", "Tài khoản hoặc mật khẩu không đúng.");
                 context.Rejected();
             }
         }

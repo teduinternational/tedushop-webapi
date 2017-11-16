@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TeduShop.Model.Models;
 using TeduShop.Web.Models;
+using TeduShop.Web.Models.Common;
 
 namespace TeduShop.Web.Mappings
 {
@@ -23,6 +24,15 @@ namespace TeduShop.Web.Mappings
                 cfg.CreateMap<AppRole, ApplicationRoleViewModel>();
                 cfg.CreateMap<AppUser, AppUserViewModel>();
                 cfg.CreateMap<Function, FunctionViewModel>();
+                cfg.CreateMap<Permission, PermissionViewModel>();
+                cfg.CreateMap<ProductImage, ProductImageViewModel>();
+                cfg.CreateMap<ProductQuantity, ProductQuantityViewModel>();
+                cfg.CreateMap<Color, ColorViewModel>();
+                cfg.CreateMap<Size, SizeViewModel>();
+                cfg.CreateMap<Order, OrderViewModel>();
+                cfg.CreateMap<OrderDetail, OrderDetailViewModel>();
+                cfg.CreateMap<Announcement, AnnouncementViewModel>();
+                cfg.CreateMap<AnnouncementUser, AnnouncementUserViewModel>();
             });
         }
     }

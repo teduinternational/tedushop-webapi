@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TeduShop.Common;
 using TeduShop.Data.Infrastructure;
@@ -17,7 +18,7 @@ namespace TeduShop.Service
 
         IEnumerable<Product> GetAll();
 
-        IEnumerable<Product> GetAll(string keyword);
+        IEnumerable<Product> GetAll(int? categoryId, string keyword);
 
         IEnumerable<Product> GetLastest(int top);
 
@@ -46,6 +47,9 @@ namespace TeduShop.Service
         IEnumerable<Product> GetListProductByTag(string tagId, int page, int pagesize, out int totalRow);
 
         bool SellProduct(int productId, int quantity);
+
+        IEnumerable<Tag> GetListProductTag(string searchText);
+
     }
 
     public class ProductService : IProductService
@@ -100,15 +104,19 @@ namespace TeduShop.Service
 
         public IEnumerable<Product> GetAll()
         {
-            return _productRepository.GetAll();
+            return _productRepository.GetAll(new string[] { "ProductCategory", "ProductTags" });
         }
 
-        public IEnumerable<Product> GetAll(string keyword)
+        public IEnumerable<Product> GetAll(int? categoryId, string keyword)
         {
+            var query = _productRepository.GetAll(new string[] { "ProductCategory", "ProductTags" });
             if (!string.IsNullOrEmpty(keyword))
-                return _productRepository.GetMulti(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
-            else
-                return _productRepository.GetAll();
+                query = query.Where(x => x.Name.Contains(keyword));
+
+            if (categoryId.HasValue)
+                query = query.Where(x => x.CategoryID == categoryId.Value);
+
+            return query;
         }
 
         public Product GetById(int id)
@@ -253,9 +261,9 @@ namespace TeduShop.Service
         public bool SellProduct(int productId, int quantity)
         {
             var product = _productRepository.GetSingleById(productId);
-            if (product.Quantity < quantity)
-                return false;
-            product.Quantity -= quantity;
+            //if (product.Quantity < quantity)
+            //    return false;
+            //product.Quantity -= quantity;
             return true;
         }
 
@@ -267,6 +275,11 @@ namespace TeduShop.Service
             else
                 query = _productRepository.GetAll();
             return query;
+        }
+
+        public IEnumerable<Tag> GetListProductTag(string searchText)
+        {
+            return _tagRepository.GetMulti(x => x.Type == CommonConstants.ProductTag && searchText.Contains(x.Name));
         }
     }
 }

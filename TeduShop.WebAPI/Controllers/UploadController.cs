@@ -20,7 +20,7 @@ namespace TeduShop.Web.Controllers
 
         [HttpPost]
         [Route("saveImage")]
-        public HttpResponseMessage SaveImage()
+        public HttpResponseMessage SaveImage(string type = "")
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             try
@@ -59,7 +59,27 @@ namespace TeduShop.Web.Controllers
                         }
                         else
                         {
-                            var directory = "/UploadedFiles/Avatars/";
+                            string directory = string.Empty;
+                            if (type == "avatar")
+                            {
+                                directory = "/UploadedFiles/Avatars/";
+                            }
+                            else if (type == "product")
+                            {
+                                directory = "/UploadedFiles/Products/";
+                            }
+                            else if (type == "news")
+                            {
+                                directory = "/UploadedFiles/News/";
+                            }
+                            else if (type == "banner")
+                            {
+                                directory = "/UploadedFiles/Banners/";
+                            }
+                            else
+                            {
+                                directory = "/UploadedFiles/";
+                            }
                             if (!Directory.Exists(HttpContext.Current.Server.MapPath(directory)))
                             {
                                 Directory.CreateDirectory(HttpContext.Current.Server.MapPath(directory));

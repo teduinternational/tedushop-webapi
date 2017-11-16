@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnnouncementService.cs" />
     <Compile Include="CommonService.cs" />
     <Compile Include="ContactDetailService.cs" />
     <Compile Include="ErrorService.cs" />
@@ -64,9 +65,12 @@
     <Compile Include="FunctionService.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="PageService.cs" />
+    <Compile Include="PermissionService.cs" />
     <Compile Include="PostCategoryService.cs" />
     <Compile Include="PostService.cs" />
     <Compile Include="ProductCategoryService.cs" />
+    <Compile Include="ProductImageService.cs" />
+    <Compile Include="ProductQuantityService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticService.cs" />
